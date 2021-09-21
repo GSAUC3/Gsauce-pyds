@@ -1,7 +1,6 @@
 from setuptools import setup,find_packages
 
 classifiers=[
-    'Intendent Audience :: Education',
     'Operating System :: OS Independent',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 2',
@@ -9,10 +8,9 @@ classifiers=[
     
 ]
 
-setup(name='pyDS',
+setup(name='Gsauce-pyds',
 version='0.0.1',
 description='Some useful and known data structure.',
-url='#',
 author='Rajarshi Banerjee',
 author_email='sambaner1050@outlook.com ',
 license='MIT',
