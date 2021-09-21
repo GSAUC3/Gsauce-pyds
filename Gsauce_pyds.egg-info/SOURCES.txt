@@ -1,0 +1,10 @@
+Licence.txt
+MANIFEST.in
+setup.py
+Gsauce_pyds.egg-info/PKG-INFO
+Gsauce_pyds.egg-info/SOURCES.txt
+Gsauce_pyds.egg-info/dependency_links.txt
+Gsauce_pyds.egg-info/not-zip-safe
+Gsauce_pyds.egg-info/top_level.txt
+dstructure/Singly_Linked_list.py
+dstructure/__init__.py

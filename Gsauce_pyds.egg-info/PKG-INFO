@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: Gsauce-pyds
+Version: 0.0.1
+Summary: Some useful and known data structure.
+Home-page: UNKNOWN
+Author: Rajarshi Banerjee
+Author-email: sambaner1050@outlook.com 
+License: MIT
+Keywords: python,linked list,singly linked list
+Platform: UNKNOWN
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 2
+Classifier: License :: OSI Approved :: MIT License
+License-File: Licence.txt
+
+UNKNOWN
+
