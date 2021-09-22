@@ -4,7 +4,7 @@ class Node:
         self.next=next_node
 
 class SLL:
-    def __init__(self,listORtuple:list =None)->None:
+    def __init__(self,listORtuple: list = None)->None:
         self.head=None
         self.tail=None
         self.len=0

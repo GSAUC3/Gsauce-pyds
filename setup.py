@@ -9,7 +9,7 @@ classifiers=[
 ]
 
 setup(name='Gsauce-pyds',
-version='0.0.1',
+version='0.0.2',
 description='Some useful and known data structure.',
 author='Rajarshi Banerjee',
 author_email='sambaner1050@outlook.com ',
