@@ -29,7 +29,7 @@ L_list= SLL()
 L_list.push(1)
 L_list.push(2)
 L_list.push('word')
-
+L_list.printList()
 
 # Output:
 # Head--> 1 --> 2 --> word --> Null
