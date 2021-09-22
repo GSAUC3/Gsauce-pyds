@@ -4,7 +4,7 @@ class Node:
         self.next=next_node
 
 class SLL:
-    def __init__(self,listORtuple=None)->None:
+    def __init__(self,listORtuple:list =None)->None:
         self.head=None
         self.tail=None
         self.len=0
@@ -57,7 +57,7 @@ class SLL:
                 print(i.data,end=' --> ')
             print('Null')
     
-    def delete(self,index):
+    def delete(self,index=-1):
         if not self.head:
             print('Linked list if already empty')
         else:
@@ -88,6 +88,7 @@ class SLL:
             past=temp
         self.head=past
     
-    
 
-
+class CSLL:
+    def __init__(self):
+        pass
