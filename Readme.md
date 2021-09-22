@@ -6,7 +6,7 @@
 ## Installation and pypi url
 
 ```
-pip install Gsauce-pyds==0.0.1
+pip install Gsauce-pyds
 ```
 
 <a href="https://pypi.org/project/Gsauce-pyds/">Go to pypi/Gsauce-pyds url</a>

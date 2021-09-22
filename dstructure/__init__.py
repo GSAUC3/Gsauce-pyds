@@ -1,2 +1,3 @@
-from .Singly_Linked_list import Node
-from .Singly_Linked_list import SLL
+from .LinkedList import Node
+from .LinkedList import SLL
+
