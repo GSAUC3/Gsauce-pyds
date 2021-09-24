@@ -89,6 +89,82 @@ class SLL:
         self.head=past
     
 
-class CSLL:
+class CircularList:
     def __init__(self):
-        pass
+        self.head = None
+        self.tail = None
+        self.len=0
+
+    def __iter__(self):
+        i=self.head
+        while i:
+            yield i
+            i=i.next
+            if i==self.head:
+                break
+    
+    def __str__(self):
+        return " This is a circular singly linked list object"
+
+
+    def push(self,value,index=-1):
+        if not self.head:
+            node=Node(value)
+            node.next=node 
+            self.head=node
+            self.tail=node
+            self.len+=1 
+        else:
+            if index==-1:
+                i=1
+                j=self.head
+                while i<=self.len-1:
+                    j=j.next
+                    i+=1
+                j.next=Node(value,self.head)
+                self.tail=j.next
+                self.len+=1 
+            elif index==0:
+                self.head=Node(value,self.head)
+                self.tail.next=self.head
+                self.len+=1
+            else:
+                j=self.head
+                i=0
+                while i<index-1:
+                    j=j.next
+                    i+=1
+                j.next=Node(value,j.next)
+                self.len+=1
+
+    def delete(self,index=-1):
+        if not self.head:
+            print('List is already empty. Duh!!')
+        else:
+            if index==-1:
+                i=self.head
+                while i.next!=self.tail:
+                    i=i.next
+                i.next=self.head
+                self.tail=i
+                self.len-=1
+            elif index==0:
+                self.head=self.head.next
+                self.tail.next=self.head
+                self.len-=1
+            else:
+                j=0
+                i=self.head
+                while j<index-1:
+                    i=i.next
+                    j+=1
+                i.next=i.next.next
+                self.len-=1
+                
+    def printList(self):
+        i=self.head
+        print('Head',end='--> ')
+        for i in self:
+            print(i.data,end='--> ')
+        print('Null')
+
