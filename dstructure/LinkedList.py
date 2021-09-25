@@ -8,7 +8,6 @@ class SLL:
         self.head=None
         self.tail=None
         self.len=0
-        # self.value=listORtuple
 
         if listORtuple:
             for i in listORtuple:
