@@ -88,12 +88,30 @@ class SLL:
             past=temp
         self.head=past
     
+    def get_node(self,node: int):
+        if self.head is None:
+            return 'List is empty :('
+        elif node<=self.len:    
+            j=1
+            i=self.head
+            while j< node:
+                i=i.next
+                j+=1
+            return i.data
+        else:
+            return 'Index out of range, index should be less than list length/size.'
+
+    
 
 class CircularList:
-    def __init__(self):
+    def __init__(self,iterable: list = None):
         self.head = None
         self.tail = None
         self.len=0
+
+        if iterable:
+            for i in iterable:
+                self.push(i)
 
     def __iter__(self):
         i=self.head
@@ -139,7 +157,7 @@ class CircularList:
 
     def delete(self,index=-1):
         if not self.head:
-            print('List is already empty. Duh!!')
+            print('List is empty. Duh!!')
         else:
             if index==-1:
                 i=self.head
@@ -167,4 +185,5 @@ class CircularList:
         for i in self:
             print(i.data,end='--> ')
         print('Null')
+
 

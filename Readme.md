@@ -1,6 +1,7 @@
 # Data Structures for python
 - Linked List
     - Singly Linked List
+    - Circularly Singly Linked List
 
 
 ## Installation and pypi url
@@ -43,8 +44,8 @@ L_list.printList()
 ```
 - Deletion
 ```python
-L_list.delete()  # this will delete the element from the end
-L_list.delete(0) # will delete the element from the beginning
+L_list.delete()  # this will delete the last element
+L_list.delete(0) # will delete the first element
 L_list.delete(4) # will delete element at index 4
 ```
 Note: delete() takes one argument `index` which is by default set to -1, i.e. `delete(index=-1)` | -1 means it will delete the element from the end.
