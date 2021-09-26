@@ -62,7 +62,7 @@ print(L_list.len) # will print the length of the linked list
 L_list.reverse() # will reverse the linked list
 # reverse() function returns NONE
 ```
--get_node()
+- get_node()
 ```python
 # To extract the data of a specific node
 L_list.get_node(i) # to collect the ith node.data 
