@@ -75,7 +75,7 @@ class DoublyLL:
     def searchIndex(self,Node_value):
         if not self.head:
             return 'No point in searching, Create a list first. Its empty'
-        i=1
+        i=0
         for j in self:
             if j.data==Node_value:
                 return i
@@ -91,4 +91,32 @@ class DoublyLL:
             j=j.next
             i+=1
         return j.data
+    
+    def pop(self,index: int = -1):
+        if not self.head:
+            print('Already empty')
+        else:
+            if index==-1:
+                self.len-=1
+                temp=self.tail.data
+                self.tail=self.tail.prev
+                self.tail.next=None
+                return temp
+            elif index==0:
+                self.len-=1
+                temp=self.head.data
+                self.head=self.head.next
+                self.head.prev=None
+                return temp
+            else:
+                self.len-=1
 
+            
+
+# a=DoublyLL([i for i in range(9)])
+# a.printList()
+# print(a.pop(0))
+# print(a.pop(0))
+# print(a.pop(0))
+# a.printList()
+# print(a.tail.data,a.head.data)
