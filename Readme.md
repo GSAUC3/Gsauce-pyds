@@ -2,10 +2,12 @@
 - Linked List
     - Singly Linked List
     - Circularly Singly Linked List
+    - Doubly Linked List
+    - Circularly Doubly Linked List
 
 
 ## Installation and pypi url
-
+Latest Version : 0.0.4
 ```
 pip install Gsauce-pyds
 ```
