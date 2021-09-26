@@ -79,7 +79,8 @@ which means value will be appended at the end.
 Indexing is 0 based.  | returns None'''
 
 pop(index)
-'''Default value of the index is set to -1 | returns the data after deleting the specified node at given index.'''
+'''Default value of the index is set to -1 | returns the data after
+deleting the specified node at given index.'''
 
 printList()
 '''Prints the entire list'''
