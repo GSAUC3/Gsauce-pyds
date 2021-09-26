@@ -93,10 +93,13 @@ class DoublyLL:
         return j.data
     
     def pop(self,index: int = -1):
+        if index >= self.len:
+            print(' Enter a valid index!! INDEX IS 0 BASED')
+            return 
         if not self.head:
             print('Already empty')
         else:
-            if index==-1:
+            if index==-1 or index==self.len-1:
                 self.len-=1
                 temp=self.tail.data
                 self.tail=self.tail.prev
@@ -106,17 +109,124 @@ class DoublyLL:
                 self.len-=1
                 temp=self.head.data
                 self.head=self.head.next
-                self.head.prev=None
+                self.head.prev=None 
                 return temp
             else:
                 self.len-=1
+                
+                i=self.head
+                j=0
+                while j<index-1:
+                    i=i.next
+                    j+=1
 
-            
+                temp=i.next.data
+                i.next=i.next.next
+                i.next.prev=i
+                return temp
 
-# a=DoublyLL([i for i in range(9)])
-# a.printList()
-# print(a.pop(0))
-# print(a.pop(0))
-# print(a.pop(0))
-# a.printList()
-# print(a.tail.data,a.head.data)
+
+
+class CircularlyDLL:
+    def __init__(self,iterable=None):
+        self.head = None
+        self.tail = None
+        self.len=0
+        if iterable:
+            for i in iterable:
+                self.push(i)
+
+    def __iter__(self):
+        i=self.head
+        while i:
+            yield i
+            i=i.next
+            if i==self.head:
+                break
+
+    def __str__(self):
+        return 'A Circularly Doubly Linked List object'
+
+    def push(self,value,index=-1):
+        if not self.head:
+            n=Node(value)
+            n.next=n
+            n.prev=n
+            self.head=n
+            self.tail=n
+            self.len+=1
+        else:
+            if index==-1:
+                self.tail.next=Node(value,self.tail,self.head)
+                self.tail=self.tail.next
+                self.head.prev=self.tail
+                self.len+=1
+            elif index==0:
+                self.head=Node(value,self.tail,self.head)
+                self.tail.next=self.head
+                self.len+=1
+            else:
+                self.len+=1
+                i=self.head
+                j=0
+                while j<index-1:
+                    i=i.next
+                    j+=1
+                i.next=Node(value,i,i.next)
+                i.next.next.prev=i.next
+                pass
+
+
+    def pop(self,index=-1):
+        if index >= self.len:
+            print(' Enter a valid index!! INDEX IS 0 BASED')
+            return 
+        if not self.head:
+            print('List is already empty')
+        else:
+            if index==-1 or index== self.len-1:
+                self.len-=1
+                temp=self.tail.data
+                self.tail=self.tail.prev
+                self.tail.next=self.head
+                self.head.prev=self.tail
+                return temp
+            elif index==0:
+                self.len-=1
+                temp=self.head.data
+                self.head=self.head.next
+                self.head.prev=self.tail
+                self.tail.next=self.head
+                return temp
+            else:
+                self.len-=1
+                i=self.head
+                j=0
+                while j<index-1:
+                    i=i.next
+                    j+=1
+                temp=i.next.data
+                i.next=i.next.next
+                i.next.prev=i
+                return temp
+
+    def printList(self):
+        if not self.head:
+            print('List is empty :(')
+        else:
+            for i in self:
+                print(i.data, end=', ')
+        print('')
+
+    def printreverse(self):
+        if not self.head:
+            print( ' List is empty :(')
+        else:
+            i=self.tail
+            j=self.len
+            while j:
+                print(i.data,end=', ')
+                i=i.prev
+                j-=1
+            print('')
+

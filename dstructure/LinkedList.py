@@ -56,11 +56,13 @@ class SLL:
                 print(i.data,end=' --> ')
             print('Null')
     
-    def delete(self,index=-1):
+    def pop(self,index=-1):
+        if index>=self.len:
+            print('index is out of range, INDEX IS 0 BASED')
         if not self.head:
             print('Linked list if already empty')
         else:
-            if index==-1:
+            if index==-1 or index==self.len-1:
                 i=self.head
                 while i.next.next: 
                     i=i.next 
@@ -100,7 +102,8 @@ class SLL:
         else:
             return 'Index out of range, index should be less than list length/size.'
 
-    
+
+# circular singly linked list --------------  
 
 class CircularList:
     def __init__(self,iterable: list = None):
@@ -154,11 +157,15 @@ class CircularList:
                 j.next=Node(value,j.next)
                 self.len+=1
 
-    def delete(self,index=-1):
+    def pop(self,index=-1):
+        '''return value needs to be added'''
+        if index>=self.len:
+            print('Enter a valid index, index is out of range! INDEX IS 0 BASED')
+            return 
         if not self.head:
             print('List is empty. Duh!!')
         else:
-            if index==-1:
+            if index==-1 or index==self.len-1:
                 i=self.head
                 while i.next!=self.tail:
                     i=i.next
@@ -184,5 +191,4 @@ class CircularList:
         for i in self:
             print(i.data,end='--> ')
         print('Null')
-
 
