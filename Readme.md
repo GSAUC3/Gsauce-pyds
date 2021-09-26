@@ -20,7 +20,8 @@ pip install Gsauce-pyds
 ```python
 from dstructure import *
 ```
-- Create a Singly Linked List object
+### Singly Linked List 
+
 ```python
 from dstructure import *
 L_list= SLL()
@@ -60,4 +61,38 @@ print(L_list.len) # will print the length of the linked list
 ```python
 L_list.reverse() # will reverse the linked list
 # reverse() function returns NONE
+```
+-get_node()
+```python
+# To extract the data of a specific node
+L_list.get_node(i) # to collect the ith node.data 
+# returns the data of a specific index.
+```
+
+### Circularly singly linked list
+
+Relevant Functions are given below:
+```python
+push(value,index)
+'''Inserts values at given index | Default value of index is set to -1 
+which means value will be appended at the end.
+Indexing is 0 based.  | returns None'''
+
+pop(index)
+'''Default value of the index is set to -1 | returns the data after deleting the specified node at given index.'''
+
+printList()
+'''Prints the entire list'''
+
+#example
+
+l=CircularList([1,2,3,4])
+print(l.len) # returns the size of the list
+l.printList()
+#OUTPUT: 
+# 4
+# Head--> 1--> 2--> 3--> 4--> Null
+
+
+
 ```
