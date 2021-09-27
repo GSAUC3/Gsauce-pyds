@@ -1,3 +1,5 @@
+'''Author: Rajarshi Banerjee'''
+
 class Node:
     def __init__(self,val=None,next_node=None):
         self.data=val

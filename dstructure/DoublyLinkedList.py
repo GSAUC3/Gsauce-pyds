@@ -1,4 +1,9 @@
-'''doubly linked list'''
+'''
+Author : Rajarshi Banerjee
+'''
+
+
+# doubly linked list
 
 class Node:
     def __init__(self,value,previous_node=None,next_node=None):
@@ -50,6 +55,25 @@ class DoublyLL:
                 i.next.next.prev=i.next
                 self.len+=1
     
+    def rotate_cw(self,index: int):
+        assert index >=0 and int(index) == index and index < self.len, 'Invalid index given' 
+        href=self.head
+        i=0
+        j=self.head
+        while j:
+            j=j.next
+            i+=1
+            if i==index:
+                break
+
+        j.prev.next=None
+        last=j.prev
+        j.prev=None
+        self.head=j
+        self.tail.next=href
+        href.prev=self.tail
+        self.tail=last        
+        
     def printList(self):
         if not self.head:
             print('List is empty :(')
@@ -126,7 +150,7 @@ class DoublyLL:
                 return temp
 
 
-
+'''Circularly Doubly linked list'''
 class CircularlyDLL:
     def __init__(self,iterable=None):
         self.head = None
@@ -229,4 +253,3 @@ class CircularlyDLL:
                 i=i.prev
                 j-=1
             print('')
-
