@@ -1,3 +1,5 @@
 build/
 dist/
 Gsauce_pyds.egg-info/
+/lol.txt
+__pycache__/

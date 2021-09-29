@@ -34,6 +34,7 @@ class SLL:
                 while i.next:
                     i=i.next
                 i.next=Node(value,None)
+                self.tail=i.next
                 self.len+=1
             elif index==0:
                 self.head=Node(value,self.head)
@@ -69,6 +70,7 @@ class SLL:
                 while i.next.next: 
                     i=i.next 
                 i.next=None
+                self.tail=i
                 self.len-=1  
             elif index==0:
                 self.head=self.head.next
