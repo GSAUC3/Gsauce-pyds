@@ -11,7 +11,7 @@
     - Queue
     
 ## Installation and pypi url
-Latest Version : 0.0.4
+Latest Version : 0.0.5
 ```
 pip install Gsauce-pyds
 ```
