@@ -44,8 +44,4 @@ class Queue(SLL):
             return self.head.data
 
 
-# circular queue using list 
 
-class circularQ:
-    def __init__(self):
-        pass

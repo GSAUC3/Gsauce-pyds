@@ -9,7 +9,7 @@
     - Stack using linked list   
 - Queue
     - Queue
-    - Dequeue
+    
 ## Installation and pypi url
 Latest Version : 0.0.4
 ```
