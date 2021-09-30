@@ -4,7 +4,9 @@ from .LinkedList import CircularList
 from .DoublyLinkedList import Node
 from .DoublyLinkedList import DoublyLL
 from .DoublyLinkedList import CircularlyDLL
-from .stack import *
+from .stack import Stack
+from .stack import lstack
+
 from .queue import *
 
 print('''Hello there! Greetings human! ( ͡° ͜ʖ ͡°) 

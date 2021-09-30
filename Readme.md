@@ -4,8 +4,12 @@
     - Circularly Singly Linked List
     - Doubly Linked List
     - Circularly Doubly Linked List
-
-
+- Stack
+    - Stack using list 
+    - Stack using linked list   
+- Queue
+    - Queue
+    - Dequeue
 ## Installation and pypi url
 Latest Version : 0.0.4
 ```

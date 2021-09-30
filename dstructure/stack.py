@@ -48,12 +48,12 @@ class Stack:
 '''implementation of stack using linked lists'''
 
 class lstack(SLL):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,x=None):
+        super().__init__(x)
         pass
 
     def __str__(self):
-        return ', '.join(str(i.data) for i in self)
+        return ', '.join(str(i.data) for i in self) if self.len!=0 else "Stack is empty"
 
     def push(self, value):
         super().push(value)
@@ -78,6 +78,4 @@ class lstack(SLL):
     def delete(self):
         self.head=None
     
-    def printStack(self):
-        print([i.data for i in self])
             
