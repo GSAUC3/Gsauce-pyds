@@ -22,7 +22,7 @@ class SLL:
             i=i.next
         
     def __str__(self)->str:
-        return f' a single linked list object.'
+        return ', '.join(str(i.data) for i in self)
 
     def push(self,value,index=-1):
         if self.head is None:
@@ -128,7 +128,7 @@ class CircularList:
                 break
     
     def __str__(self):
-        return " This is a circular singly linked list object"
+        return ', '.join(str(i.data) for i in self)
 
 
     def push(self,value,index=-1):

@@ -1,5 +1,6 @@
 '''Stack using list or dynamic arrays'''
-from LinkedList import Node,SLL
+from .LinkedList import Node,SLL
+
 
 class Stack:
     def __init__(self,*vals):
@@ -9,7 +10,7 @@ class Stack:
             self.push(i)
     
     def __str__(self):
-        return ', '.join(map(str,self.l)) 
+        return ', '.join(map(str,self.l)) if not self.isEmpty() else "Stack is empty"
         
     def isEmpty(self):
         if not self.l:
@@ -78,4 +79,3 @@ class lstack(SLL):
     def delete(self):
         self.head=None
     
-            
