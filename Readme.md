@@ -10,15 +10,25 @@
 - Queue
     - Queue
     
-## Installation and pypi url
+## Installation
 Latest Version : 0.0.5
 ```
 pip install Gsauce-pyds
 ```
 
-<a href="https://pypi.org/project/Gsauce-pyds/">Go to pypi/Gsauce-pyds url</a>
+## License
 
-## How to use?
+© 2021 Rajarshi Banerjee
+
+This repository is licensed under the MIT license. See Licence for details.
+
+## Link to package
+
+<a href="https://pypi.org/project/Gsauce-pyds/">Gsauce-pyds | pypi </a>
+
+***
+
+# How to use?
 
 - Import the pacakge
 ```python
