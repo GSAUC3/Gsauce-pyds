@@ -13,7 +13,7 @@ from .Sorting import InsertionSort
 from .Sorting import MergeSort
 from .Sorting import QuickSort
 from .Sorting import BucketSort
-
+from .Algos import *
 
 __version__ = '0.0.6'
 # print('''Hello there! Greetings human! ( ͡° ͜ʖ ͡°) 
