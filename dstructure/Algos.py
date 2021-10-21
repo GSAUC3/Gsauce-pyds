@@ -14,3 +14,20 @@ def seiveprimes(n):
         i+=1
 
     return isprimearray
+
+def euclidGCD(x: int,y: int):
+    if y==0:
+        return x
+    return euclidGCD(y,x%y)
+
+
+def powermodulo(a,b,n):
+    '''returns (a^b)%n'''
+    ans=1
+    while b>0:
+        if (b&1)!=0:
+            ans=(ans* a%n)%n
+        a=(a%n * a%n)%n
+        b=b>>1
+    return ans
+    
