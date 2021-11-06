@@ -1,6 +1,8 @@
 '''
              Queue
 FIFO    first in first out
+
+Queue implementation using Singly linked list
 '''
 from .LinkedList import SLL
 

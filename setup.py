@@ -14,7 +14,7 @@ classifiers = [
 ]
 
 setup(name='Gsauce-pyds',
-      version='0.1.1',
+      version='0.2.0',
       description='Some useful and known data structure.',
       long_description=README,
       long_description_content_type='text/markdown',

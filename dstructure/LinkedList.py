@@ -58,6 +58,20 @@ class SLL:
             for i in self:
                 print(i.data,end=' --> ')
             print('Null')
+
+    def searchNode(self,value):
+        '''retuens the index of node containing 
+        the value if the value is present in the list
+        else returns -1'''
+        i=0
+        for j in self:
+            if j.data==value:
+                return i
+            i+=1
+        else:
+            return -1
+        
+
     
     def pop(self,index=-1):
         if index>=self.len:
