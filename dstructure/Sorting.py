@@ -24,7 +24,7 @@ def SelectionSort(x:list):
     for i in range(len(x)):
         smol=i
         for j in range(i+1,len(x)):
-            if x[i]>x[j]:
+            if x[smol]>x[j]:
                 smol=j
         x[i],x[smol]=x[smol],x[i]
     return x
@@ -54,7 +54,7 @@ def InsertionSort(x):
         x[i+1]=key
     return x
 
-
+print(SelectionSort([8,6,7,5,3,4,1,2]))
 
 def MergeSort(a):
     '''
