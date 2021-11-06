@@ -11,7 +11,7 @@
     - Queue
     
 ## Installation
-Latest Version : 0.0.6
+Latest Version : 0.1.0
 ```
 pip install Gsauce-pyds
 ```
