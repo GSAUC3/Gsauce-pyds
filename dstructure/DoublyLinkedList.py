@@ -5,7 +5,7 @@ Author : Rajarshi Banerjee
 
 # doubly linked list
 
-class Node:
+class dNode:
     def __init__(self,value,previous_node=None,next_node=None):
         self.data=value
         self.prev=previous_node
@@ -32,17 +32,17 @@ class DoublyLL:
     
     def push(self,value,index=-1):
         if not self.head:
-            n=Node(value)
+            n=dNode(value)
             self.head=n
             self.tail=n
             self.len+=1
         else:
             if index==-1:
                 self.len+=1
-                self.tail.next=Node(value,self.tail)
+                self.tail.next=dNode(value,self.tail)
                 self.tail=self.tail.next
             elif index==0:
-                self.head=Node(value,None,self.head)
+                self.head=dNode(value,None,self.head)
                 self.head.next.prev=self.head
                 self.len+=1
             else:
@@ -51,7 +51,7 @@ class DoublyLL:
                 while j<index-1:
                     i=i.next
                     j+=1
-                i.next=Node(value,i,i.next)
+                i.next=dNode(value,i,i.next)
                 i.next.next.prev=i.next
                 self.len+=1
     
@@ -173,7 +173,7 @@ class CircularlyDLL:
 
     def push(self,value,index=-1):
         if not self.head:
-            n=Node(value)
+            n=dNode(value)
             n.next=n
             n.prev=n
             self.head=n
@@ -181,12 +181,12 @@ class CircularlyDLL:
             self.len+=1
         else:
             if index==-1:
-                self.tail.next=Node(value,self.tail,self.head)
+                self.tail.next=dNode(value,self.tail,self.head)
                 self.tail=self.tail.next
                 self.head.prev=self.tail
                 self.len+=1
             elif index==0:
-                self.head=Node(value,self.tail,self.head)
+                self.head=dNode(value,self.tail,self.head)
                 self.tail.next=self.head
                 self.len+=1
             else:
@@ -196,7 +196,7 @@ class CircularlyDLL:
                 while j<index-1:
                     i=i.next
                     j+=1
-                i.next=Node(value,i,i.next)
+                i.next=dNode(value,i,i.next)
                 i.next.next.prev=i.next
                 pass
 

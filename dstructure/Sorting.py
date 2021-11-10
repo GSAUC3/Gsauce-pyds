@@ -97,5 +97,3 @@ def QuickSort(a):
     pass
 
 
-def BucketSort(a):
-    pass

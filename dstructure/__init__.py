@@ -1,7 +1,7 @@
 from .LinkedList import Node
 from .LinkedList import SLL
 from .LinkedList import CircularList
-from .DoublyLinkedList import Node
+from .DoublyLinkedList import dNode
 from .DoublyLinkedList import DoublyLL
 from .DoublyLinkedList import CircularlyDLL
 from .stack import Stack
@@ -12,8 +12,8 @@ from .Sorting import BubbleSort
 from .Sorting import InsertionSort 
 from .Sorting import MergeSort
 from .Sorting import QuickSort
-from .Sorting import BucketSort
 from .Algos import *
+from .dequeue import DQ
 
 __version__ = '0.0.6'
 # print('''Hello there! Greetings human! ( ͡° ͜ʖ ͡°) 

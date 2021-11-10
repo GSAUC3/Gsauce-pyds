@@ -62,7 +62,10 @@ class SLL:
     def searchNode(self,value):
         '''retuens the index of node containing 
         the value if the value is present in the list
-        else returns -1'''
+        else returns -1
+        
+        Indexing is 0-based indexing'''
+        
         i=0
         for j in self:
             if j.data==value:
