@@ -9,10 +9,28 @@ class binaryTree:
     def __init__(self,root=None) -> None:
         self.root=root
         self.size=0
+
+    def __str__(self) -> str:
+        l=[]
+        self.__s(self.root,l)
+        return ', '.join(l)
+    
+    def __s(self,node,l):
+        if node:
+            self.__s(node.left,l)
+            l.append(str(node.data))
+            self.__s(node.right,l)
     
     def insert():
         pass
 
+    def height(self):
+        return self.__height(self.root)
+        
+    def __height(self,node):
+        if node is None:
+            return 0
+        return max(self.__height(node.left),self.__height(node.right))+1
 
     def Max(self):
         return self.__max(self.root)
@@ -65,11 +83,27 @@ class binaryTree:
                 print(node.data,end=' ')
                 self.__inorder(node.right)
 
+    def __search(self,node,x):
+
+        if node is None:
+            return None
+        elif node.data==x:
+            return True
+        elif self.__search(node.left,x)==True:
+            return True
+        else: 
+            return self.__search(node.right,x)
+            
+    def search(self,value)->bool:
+        return self.__search(self.root,value)
+            
 root=btnode(10,btnode(20),btnode(30,btnode(40),btnode(50)))
 bt=binaryTree(root)
-bt.traversal('in')
-bt.traversal('post')
-bt.traversal()
-print(bt.Max())
-print(bt.Min())
+# bt.traversal('in')
+# bt.traversal('post')
+# bt.traversal()
+# print(bt.Max())
+# print(bt.Min())
+# print(bt.search(40))
+print(bt.height())
 
