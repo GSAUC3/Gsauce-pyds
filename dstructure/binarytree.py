@@ -1,5 +1,4 @@
 import math
-from Q import Queue
 
 from collections import deque
 
@@ -25,9 +24,6 @@ class binaryTree:
             l.append(str(node.data))
             self.__s(node.right,l)
     
-    def insert():
-        pass
-
     def height(self):
         return self.__height(self.root)
         
@@ -69,31 +65,31 @@ class binaryTree:
             print()
         
         if order=='level':
-            if self.root is None:
-                return 
-            node=self.root
-            q=Queue()
-            q.push(node)
-            while q:
-                node=q.pop_front()
-                print(node.data,end=' ')
-                if node.left:
-                    q.push(node.left)
-                if node.right:
-                    q.push(node.right)
-                
             # if self.root is None:
             #     return 
             # node=self.root
-            # q=deque()
-            # q.append(node)
+            # q=Queue()
+            # q.push(node)
             # while q:
-            #     node=q.popleft()
+            #     node=q.pop_front()
             #     print(node.data,end=' ')
             #     if node.left:
-            #         q.append(node.left)
+            #         q.push(node.left)
             #     if node.right:
-            #         q.append(node.right)
+            #         q.push(node.right)
+                
+            if self.root is None:
+                return 
+            node=self.root
+            q=deque()
+            q.append(node)
+            while q:
+                node=q.popleft()
+                print(node.data,end=' ')
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
                 
         
     def __preorder(self,node):
@@ -129,13 +125,29 @@ class binaryTree:
     def search(self,value)->bool:
         return self.__search(self.root,value)
             
-root=btnode(10,btnode(20),btnode(30,btnode(40),btnode(50)))
-bt=binaryTree(root)
-# bt.traversal('in')
-bt.traversal('level')
-# bt.traversal()
-# print(bt.Max())
-# print(bt.Min())
-# print(bt.search(40))
-# print(bt.height())
+class BST:
+    def __init__(self,root) -> None:
+        self.root=root
+    
+    def __insert(self,node):
+        pass
 
+    def __search(self,node,x):
+        if node is None:
+            return False
+        elif node.data==x:
+            return True
+        elif node.data>x:
+            return self.__search(node.left,x)
+        else:
+            return  self.__search(node.right,x)
+
+    def insert(self):
+        return self.__insert(self.root)
+    
+    def search(self,element):
+        return self.__search(self.root,element)
+    
+
+bt=btnode(40,btnode(20,btnode(8),btnode(30)),btnode(80,btnode(60),btnode(100,None,btnode(120))))
+a=BST(bt)
