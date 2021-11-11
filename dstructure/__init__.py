@@ -21,7 +21,7 @@ from .BinaryTree import btnode
 
 
 
-__version__ = '0.0.6'
+__version__ = '0.2.0'
 # print('''Hello there! Greetings human! ( ͡° ͜ʖ ͡°) 
 # Make sure to go through the README.md file or the docs. 
 # Be careful with indexing \n Happy Coding!!! (ᵔᴥᵔ) ''')

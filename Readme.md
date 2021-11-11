@@ -8,10 +8,15 @@
     - Stack using list 
     - Stack using linked list   
 - Queue
-    - Queue
+    - Queue using singly linked list
+- Dequeue 
+    - dequeue using doubly linked list
+- Trees
+    - Binary Trees
+    - Binary search trees (BST)
     
 ## Installation
-Latest Version : 0.1.0
+Latest Version : 0.2.0
 ```
 pip install Gsauce-pyds
 ```
