@@ -22,13 +22,15 @@ class DoublyLL:
                 self.push(i)
     
     def __iter__(self):
+        '''will generate iterable list object 
+        use i.data to get the value at each node'''
         i=self.head
         while i:
             yield i
             i=i.next
     
     def __str__(self):
-        return " A Doubly linked list object"
+        return ' '.join(str(i.data) for i in self)
     
     def push(self,value,index=-1):
         if not self.head:
@@ -169,7 +171,7 @@ class CircularlyDLL:
                 break
 
     def __str__(self):
-        return 'A Circularly Doubly Linked List object'
+        return ' '.join(str(i.data) for i in self)
 
     def push(self,value,index=-1):
         if not self.head:

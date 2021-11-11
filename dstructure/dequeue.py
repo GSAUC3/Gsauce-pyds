@@ -1,27 +1,44 @@
 
 from .DoublyLinkedList import DoublyLL
 
-# functions to be included are:
-# pushback(val)
-# pushfront(val)
-# insert(index,val)
 
-# extendrear(list)
-# extendfront(list)
+class dQ(DoublyLL):
+    def __init__(self,iterables=None):
+        super().__init__(iterables)
+    
+    def __len__(self):
+        return self.len
 
-# pop()
-# popfront()
-# remove() removes the first occurance of the mentioned value
-# remove first occurance and all the occurances
+    def __iter__(self):
+        i=self.head
+        while i:
+            yield i.data
+            i=i.next
 
-# rotate()
-# reverse()
+    def __str__(self):
+        return super().__str__()
 
-# index(element) search for given element and returns the index
+    def pushback(self,val):
+        super().push(val)
+    
+    def pushfront(self,val):
+        super().push(val,0)
+    
+    def pop(self):
+        return super().pop()
+    
+    def popfront(self):
+        return super().pop(0)
+    
+    def insert(self,val,index: int):
+        super().push(val,index)
 
+    def extendright(self,iterables: list):
+        for i in iterables:
+            self.pushback(i)
 
-
-class DQ(DoublyLL):
-    def __init__(self):
-        super().__init()
+    def extendleft(self,iterables: list):
+        for i in iterables:
+            self.pushfront(i)
+        
 

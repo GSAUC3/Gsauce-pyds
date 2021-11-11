@@ -81,7 +81,7 @@ class SLL:
         if index>=self.len:
             print('index is out of range, INDEX IS 0 BASED')
         if not self.head:
-            print('Linked list if already empty')
+            return 
         else:
             if self.head ==None:
                 return None

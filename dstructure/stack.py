@@ -1,5 +1,5 @@
 '''Stack using list or dynamic arrays'''
-from .LinkedList import Node,SLL
+from .LinkedList import SLL
 
 
 class Stack:

@@ -13,7 +13,13 @@ from .Sorting import InsertionSort
 from .Sorting import MergeSort
 from .Sorting import QuickSort
 from .Algos import *
-from .dequeue import DQ
+from .dequeue import dQ
+from .BinaryTree import binaryTree
+from .BinaryTree import BST
+from .BinaryTree import btnode
+
+
+
 
 __version__ = '0.0.6'
 # print('''Hello there! Greetings human! ( ͡° ͜ʖ ͡°) 

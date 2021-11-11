@@ -1,5 +1,5 @@
 import math
-
+# from Q import Queue
 from collections import deque
 
 class btnode:
@@ -72,6 +72,7 @@ class binaryTree:
             # q.push(node)
             # while q:
             #     node=q.pop_front()
+                
             #     print(node.data,end=' ')
             #     if node.left:
             #         q.push(node.left)
@@ -148,6 +149,3 @@ class BST:
     def search(self,element):
         return self.__search(self.root,element)
     
-
-bt=btnode(40,btnode(20,btnode(8),btnode(30)),btnode(80,btnode(60),btnode(100,None,btnode(120))))
-a=BST(bt)

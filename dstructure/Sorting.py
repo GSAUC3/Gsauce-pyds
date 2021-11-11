@@ -54,8 +54,6 @@ def InsertionSort(x):
         x[i+1]=key
     return x
 
-print(SelectionSort([8,6,7,5,3,4,1,2]))
-
 def MergeSort(a):
     '''
     Time complexity : O(N log N)
