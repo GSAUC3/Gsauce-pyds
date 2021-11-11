@@ -6,7 +6,7 @@ from .DoublyLinkedList import DoublyLL
 from .DoublyLinkedList import CircularlyDLL
 from .stack import Stack
 from .stack import lstack
-from .queue import *
+from .Q import *
 from .Sorting import SelectionSort 
 from .Sorting import BubbleSort 
 from .Sorting import InsertionSort 

@@ -4,7 +4,7 @@ FIFO    first in first out
 
 Queue implementation using Singly linked list
 '''
-from .LinkedList import SLL
+from LinkedList import SLL
 
 class Queue(SLL):
     def __init__(self,iterables:list = None,capacity: int = None) -> None:
@@ -14,6 +14,9 @@ class Queue(SLL):
     def __str__(self):
         return ', '.join(str(i.data) for i in self) if self.len!=0 else "Queue is empty"
 
+    def __len__(self):
+        return self.len
+    
     def isFull(self):
         if self.capacity:
             if self.len==self.capacity:
@@ -37,13 +40,10 @@ class Queue(SLL):
     def pop_front(self):
         if self.isEmpty():
             return 'Queue is already empty'
-        a=self.head.data
-        super().pop(0)
-        return a
+        return super().pop(0)
     
     def peek(self):
         if not self.isEmpty():
             return self.head.data
 
-
-
+    

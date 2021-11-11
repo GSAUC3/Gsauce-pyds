@@ -1,4 +1,8 @@
 import math
+from Q import Queue
+
+from collections import deque
+
 class btnode:
     def __init__(self,data,left_child=None,right_child=None):
         self.data=data
@@ -64,6 +68,34 @@ class binaryTree:
             self.__inorder(self.root)
             print()
         
+        if order=='level':
+            if self.root is None:
+                return 
+            node=self.root
+            q=Queue()
+            q.push(node)
+            while q:
+                node=q.pop_front()
+                print(node.data,end=' ')
+                if node.left:
+                    q.push(node.left)
+                if node.right:
+                    q.push(node.right)
+                
+            # if self.root is None:
+            #     return 
+            # node=self.root
+            # q=deque()
+            # q.append(node)
+            # while q:
+            #     node=q.popleft()
+            #     print(node.data,end=' ')
+            #     if node.left:
+            #         q.append(node.left)
+            #     if node.right:
+            #         q.append(node.right)
+                
+        
     def __preorder(self,node):
             if node:
                 print(node.data,end=' ')
@@ -100,10 +132,10 @@ class binaryTree:
 root=btnode(10,btnode(20),btnode(30,btnode(40),btnode(50)))
 bt=binaryTree(root)
 # bt.traversal('in')
-# bt.traversal('post')
+bt.traversal('level')
 # bt.traversal()
 # print(bt.Max())
 # print(bt.Min())
 # print(bt.search(40))
-print(bt.height())
+# print(bt.height())
 

@@ -27,6 +27,7 @@ class SLL:
     def push(self,value,index=-1):
         if self.head is None:
             self.head=Node(value)
+            self.tail=self.head
             self.len+=1
         else:
             if index==-1:
@@ -82,16 +83,26 @@ class SLL:
         if not self.head:
             print('Linked list if already empty')
         else:
-            if index==-1 or index==self.len-1:
+            if self.head ==None:
+                return None
+            if  self.head.next==None:
+                self.head=None
+            elif index==-1 or index==self.len-1:
                 i=self.head
                 while i.next.next: 
-                    i=i.next 
+                    i=i.next
+                temp=i.next.data 
                 i.next=None
                 self.tail=i
                 self.len-=1  
+                return temp
             elif index==0:
-                self.head=self.head.next
+                val=self.head.data
+                temp=self.head.next
+                self.head.next=None
+                self.head=temp
                 self.len-=1
+                return val
             else:
                 self.len-=1
                 i=self.head
@@ -99,8 +110,10 @@ class SLL:
                 while j<index-1:
                     i=i.next
                     j+=1
+                val=i.next.data
                 i.next=i.next.next                
-        
+                return val
+                        
     def reverse(self):
         past=None
         while self.head:
