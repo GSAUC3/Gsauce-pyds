@@ -1,8 +1,6 @@
 '''
 Author : Rajarshi Banerjee
 '''
-
-
 # doubly linked list
 
 class dNode:

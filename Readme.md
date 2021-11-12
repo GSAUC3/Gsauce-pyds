@@ -16,7 +16,7 @@
     - Binary search trees (BST)
     
 ## Installation
-Latest Version : 0.2.0
+Latest Version : 0.3.0
 ```
 pip install Gsauce-pyds
 ```
