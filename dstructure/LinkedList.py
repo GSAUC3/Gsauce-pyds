@@ -1,141 +1,181 @@
 '''Author: Rajarshi Banerjee'''
 
+from typing import Optional,Any
+from exceptions import EmptyList
+from copy import deepcopy
+
 class Node:
-    def __init__(self,val=None,next_node=None):
-        self.data=val
-        self.next=next_node
+    def __init__(self,data:Optional[Any]=None,
+                nextNode:Optional[Any]=None) -> None:
+        self.data = data 
+        self.next = nextNode
+    
+    def __repr__(self) -> str:
+        return f'Node(data = {self.data})'
+        
+    def __str__(self) -> str:
+        return f'Node(data = {self.data})'
 
-class SLL:
-    def __init__(self,listORtuple: list = None)->None:
-        self.head=None
-        self.tail=None
-        self.len=0
 
-        if listORtuple:
-            for i in listORtuple:
-                self.push(i)
+class LinkedList(object):
+    def __init__(self,*e) -> None:
+        self.head = None
+        self.tail = None 
+        self.__size = 0
+
+        if e:
+            if type(e[0]) is range or list or tuple :
+                for i in e[0]:
+                    self.append(i)
+            else: 
+                for i in e:
+                    self.append(i)
+
+    @property    
+    def size(self)->int:
+        return self.__size
+    
+    def __len__(self):
+        return self.__size
 
     def __iter__(self):
-        i=self.head
+        i = self.head 
         while i:
-            yield i
-            i=i.next
-        
-    def __str__(self)->str:
-        return ', '.join(str(i.data) for i in self)
+            yield i 
+            i = i.next
 
-    def push(self,value,index=-1):
-        if self.head is None:
-            self.head=Node(value)
-            self.tail=self.head
-            self.len+=1
-        else:
-            if index==-1:
-                i=self.head
-                while i.next:
-                    i=i.next
-                i.next=Node(value,None)
-                self.tail=i.next
-                self.len+=1
-            elif index==0:
-                self.head=Node(value,self.head)
+    def __str__(self) -> str:
+        return 'LinkedList(['+', '.join(str(i.data) for i in self)+'])'
+    
+    def __repr__(self) -> str:
+        return ' -> '.join(i.__str__() for i in self)
+    
+
+    def __getitem__(self,index):
+        if isinstance(index,slice):
+            if index.start<0:
+                raise IndexError
+            new = LinkedList()
+            j = self.head
+            i = 0
+            __start = index.start if index.start is not None else 0
+            __stop = index.stop if index.stop is not None else self.__size
+            while j:
+                if __start<=i<__stop:
+                    new.append(j.data)
+                j=j.next 
+                i+=1
+            return new
+        elif isinstance(index,int):
+            assert index>=0, 'index should be positive'
+            if index>=self.__size:
+                raise IndexError
             else:
-                self.len+=1
                 i=0
-                a=self.head
-                while i<index-1:
-                    a=a.next
+                j=self.head
+                while i<index:
+                    j=j.next
                     i+=1
-                
-                a.next=Node(value,a.next)
+                return j
 
-    def printList(self)->None:
+    def __setitem__(self,index:int,data:Any)->None:
+        assert index>=0 and type(index)==int, 'Index must be an integer >= 0'
+        if index>=self.__size:raise IndexError 
+        i = 0
+        j = self.head 
+        while i<index:
+            j=j.next 
+            i+=1 
+        j.data = data 
+
+
+    def append(self,data:Any)->None:
+        self.__size+=1
         if self.head is None:
-            print('Linked List is empty')
-            return
+            self.head = Node(data)
+            self.tail = self.head 
         else:
+            self.tail.next = Node(data)
+            self.tail = self.tail.next
 
-            print('Head-->',end=' ')
-            for i in self:
-                print(i.data,end=' --> ')
-            print('Null')
-
-    def searchNode(self,value):
-        '''retuens the index of node containing 
-        the value if the value is present in the list
-        else returns -1
-        
-        Indexing is 0-based indexing'''
-        
-        i=0
-        for j in self:
-            if j.data==value:
-                return i
-            i+=1
-        else:
-            return -1
-        
-
-    
-    def pop(self,index=-1):
-        if index>=self.len:
-            print('index is out of range, INDEX IS 0 BASED')
-        if not self.head:
-            return 
-        else:
-            if self.head ==None:
-                return None
-            if  self.head.next==None:
+    def pop(self)->None:
+        if self.head is not None:
+            if self.head.next is None:
                 self.head=None
-            elif index==-1 or index==self.len-1:
-                i=self.head
-                while i.next.next: 
-                    i=i.next
-                temp=i.next.data 
-                i.next=None
-                self.tail=i
-                self.len-=1  
-                return temp
-            elif index==0:
-                val=self.head.data
-                temp=self.head.next
-                self.head.next=None
-                self.head=temp
-                self.len-=1
-                return val
+                self.tail=None
             else:
-                self.len-=1
-                i=self.head
-                j=0
-                while j<index-1:
-                    i=i.next
-                    j+=1
-                val=i.next.data
-                i.next=i.next.next                
-                return val
-                        
-    def reverse(self):
-        past=None
-        while self.head:
-            temp=self.head
-            self.head=self.head.next
-            temp.next=past
-            past=temp
-        self.head=past
-    
-    def get_node(self,node: int):
-        if self.head is None:
-            return 'List is empty :('
-        elif node<=self.len:    
-            j=1
-            i=self.head
-            while j< node:
-                i=i.next
-                j+=1
-            return i.data
+                i = self.head 
+                while i.next.next:
+                    i = i.next
+                i.next = None 
+                self.tail = i
+            self.__size-=1
         else:
-            return 'Index out of range, index should be less than list length/size.'
+            raise EmptyList
+    
+    def insert(self,at,data)->None:
+        assert 0<=at<self.__size, 'index (at) should be an int between [ 0, len(list) )'
+        i=0
+        j = self.head
+        new = Node(data)
+        if at == 0:
+            new.next = self.head 
+            self.head = new 
+            self.__size+=1
+            return 
+        else: 
+            while i<at-1:
+                j=j.next 
+                i+=1
+            new.next = j.next 
+            j.next = new      
+            self.__size+=1
 
+         
+    def remove(self,at)->None:
+        assert 0<=at<self.__size, 'index (at) should be an int between [ 0, len(list) )'
+        i=0
+        j=self.head 
+        if at ==0:
+            self.head = self.head.next
+            j.next = None 
+            self.__size-=1
+        else:
+            while i<at-1:
+                j=j.next 
+                i+=1
+            temp = j.next 
+            j.next = temp.next
+            temp.next=None 
+            self.__size-=1
+        
+
+    def __add__(self,_o): 
+        if isinstance(_o,LinkedList):
+            new = deepcopy(_o)
+            self.tail.next = new.head 
+            self.tail = new.tail      
+            self.tail.next=None
+            self.__size+=len(_o)  
+            del new
+            return self
+        else:
+            raise ValueError
+    
+    def reverse(self)->None:
+        past = None 
+        present = self.head
+        future = present.next 
+        while present: 
+            present.next = past 
+            past = present 
+            present = future 
+            if future is not None:
+                future = future.next 
+        self.tail = self.head 
+        self.head = past 
+    
+ 
 
 # circular singly linked list --------------  
 
