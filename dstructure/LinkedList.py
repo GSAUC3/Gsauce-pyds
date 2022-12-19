@@ -398,6 +398,12 @@ class DoublyLinkedList(object):
         self.head, self.tail = self.tail, self.head  
 
 
+    def insert(self,at,data):
+        pass 
+
+    def remove(self,at):
+        pass
+
 '''------------Circularly Doubly linked list--------------'''
 
         

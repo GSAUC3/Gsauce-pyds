@@ -1,6 +1,6 @@
 '''Stack using list or dynamic arrays'''
-from .linkedlist import SLL
-
+from .linkedlist import LinkedList
+from .exceptions import StackEmpty
 
 class Stack:
     def __init__(self,*vals):
@@ -25,8 +25,6 @@ class Stack:
         
         return self.l[self.top]
         
-
-
     def push(self,value):
         self.l.append(value)
 
@@ -37,7 +35,6 @@ class Stack:
         return a
 
     def printStack(self):
-        # x=self.l[::-1]
         print('_',end='')
         print('_\n_'.join(map(str,self.l[::-1])),end='')
         print('_') 
@@ -48,34 +45,35 @@ class Stack:
 
 '''implementation of stack using linked lists'''
 
-class lstack(SLL):
-    def __init__(self,x=None):
-        super().__init__(x)
-        pass
+class Stack2(LinkedList):
+    def __init__(self, *e) -> None:
+        super().__init__(*e) 
+    
 
     def __str__(self):
-        return ', '.join(str(i.data) for i in self) if self.len!=0 else "Stack is empty"
+        s = ''
+        for i in self:
+            s += str(i.data)+','
+        s =s.removesuffix(',')
+        return f'Stack([{s}])'
 
-    def push(self, value):
-        super().push(value)
+    def __repr__(self):
+        s = ''
+        for i in self:
+            s += str(i.data)+','
+        s =s.removesuffix(',')
+        return f'Stack([{s}], top={self.tail.data}, size={len(self)})'
 
+    @property
     def peek(self):
-        if self.head is None or self.len==0:
-            return ' stack is empty'
         return self.tail.data
 
-    def isEmpty(self):
-        if self.len ==0:
-            return True
-        return False
-    
+    def push(self,item):
+        super().append(item)
+        
     def pop(self):
-        if self.len == 0:
-            return 'Stack is empty'
-        a=self.tail.data
-        super().pop()
-        return a
-
-    def delete(self):
-        self.head=None
-    
+        if len(self)==0:
+            raise StackEmpty
+        else:
+            super().pop()
+ 
