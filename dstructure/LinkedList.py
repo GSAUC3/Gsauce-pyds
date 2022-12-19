@@ -165,8 +165,8 @@ class LinkedList(object):
     def reverse(self)->None:
         past = None 
         present = self.head
-        future = present.next 
         while present: 
+            future = present.next 
             present.next = past 
             past = present 
             present = future 
@@ -178,91 +178,80 @@ class LinkedList(object):
  
 
 # circular singly linked list --------------  
-
-class CircularList:
-    def __init__(self,iterable: list = None):
-        self.head = None
-        self.tail = None
-        self.len=0
-
-        if iterable:
-            for i in iterable:
-                self.push(i)
-
+class CircularList: 
+    def __init__(self,*e) -> None:
+        self.head = None 
+        self.tail = None 
+        self.__size = 0
+        if e: 
+            if type(e[0]) is range or list or tuple:
+                for i in e[0]:
+                    self.append(i)
+            else:
+                for i in e:
+                    self.append(i)
+        
     def __iter__(self):
-        i=self.head
+        i = self.head 
         while i:
             yield i
-            i=i.next
-            if i==self.head:
-                break
-    
-    def __str__(self):
-        return ', '.join(str(i.data) for i in self)
+            i = i.next  
+            if i == self.head:
+                break 
 
+    def __len__(self):
+        return self.__size
 
-    def push(self,value,index=-1):
-        if not self.head:
-            node=Node(value)
-            node.next=node 
-            self.head=node
-            self.tail=node
-            self.len+=1 
-        else:
-            if index==-1:
-                i=1
-                j=self.head
-                while i<=self.len-1:
-                    j=j.next
-                    i+=1
-                j.next=Node(value,self.head)
-                self.tail=j.next
-                self.len+=1 
-            elif index==0:
-                self.head=Node(value,self.head)
-                self.tail.next=self.head
-                self.len+=1
-            else:
-                j=self.head
-                i=0
-                while i<index-1:
-                    j=j.next
-                    i+=1
-                j.next=Node(value,j.next)
-                self.len+=1
-
-    def pop(self,index=-1):
-        '''return value needs to be added'''
-        if index>=self.len:
-            print('Enter a valid index, index is out of range! INDEX IS 0 BASED')
-            return 
-        if not self.head:
-            print('List is empty. Duh!!')
-        else:
-            if index==-1 or index==self.len-1:
-                i=self.head
-                while i.next!=self.tail:
-                    i=i.next
-                i.next=self.head
-                self.tail=i
-                self.len-=1
-            elif index==0:
-                self.head=self.head.next
-                self.tail.next=self.head
-                self.len-=1
-            else:
-                j=0
-                i=self.head
-                while j<index-1:
-                    i=i.next
-                    j+=1
-                i.next=i.next.next
-                self.len-=1
-                
-    def printList(self):
-        i=self.head
-        print('Head',end='--> ')
+    def __repr__(self) -> str:
+        s = ''
         for i in self:
-            print(i.data,end='--> ')
-        print('Null')
+            s += str(i.data) + ' '
+        return s
 
+    def append(self,data):
+        self.__size +=1
+        if self.head is None:
+            self.head = Node(data)
+            self.tail = self.head
+        else: 
+            self.tail.next = Node(data)
+            self.tail = self.tail.next 
+            self.tail.next = self.head 
+            
+
+    def pop(self):
+        if len(self)<=0:
+            raise EmptyList
+        if self.tail is self.head and self.head is not None:
+            self.__size-=1
+            self.head=None
+            self.tail=None
+        else: 
+            i = self.head 
+            while i.next!= self.tail:
+                i = i.next 
+            temp = self.tail
+            i.next = self.head 
+            temp.next = None 
+            del temp 
+            self.tail = i 
+            self.__size-=1
+        
+    
+    def insert(self,index,data):
+        assert 0<=index<self.__size , 'index should be an int between [0,len(list))'
+        i =0 
+        j = self.head 
+        new = Node(data)
+        if index == 0:
+            new.next = self.head 
+            self.head = new
+            self.tail.next = self.head  
+            self.__size+=1
+        else:
+            while i< index-1:
+                j=j.next 
+                i+=1 
+            new.next = j.next 
+            j.next = new 
+            self.__size+=1
