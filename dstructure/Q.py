@@ -4,7 +4,7 @@ FIFO    first in first out
 
 Queue implementation using Singly linked list
 '''
-from .LinkedList import SLL
+from .linkedlist import SLL
 
 class Queue(SLL):
     def __init__(self,iterables:list = None,capacity: int = None) -> None:
