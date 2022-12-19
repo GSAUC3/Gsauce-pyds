@@ -19,6 +19,10 @@ class Node:
 
 class LinkedList(object):
     def __init__(self,*e) -> None:
+        """
+        >>>
+        
+        """
         self.head = None
         self.tail = None 
         self.__size = 0

@@ -1,156 +1,123 @@
 '''
 Author : Rajarshi Banerjee
 '''
+from exceptions import *
+
+
 # doubly linked list
-
-class dNode:
-    def __init__(self,value,previous_node=None,next_node=None):
-        self.data=value
-        self.prev=previous_node
-        self.next=next_node
-
-class DoublyLL:
-    def __init__(self,iterable: list = None):
-        self.head=None
-        self.tail=None
-        self.len=0
-
-        if iterable:
-            for i in iterable:
-                self.push(i)
+class node:
+    def __init__(self,data,prev=None,next=None):
+        self.data = data 
+        self.prev = None
+        self.next = None
     
-    def __iter__(self):
-        '''will generate iterable list object 
-        use i.data to get the value at each node'''
-        i=self.head
-        while i:
-            yield i
-            i=i.next
-    
-    def __str__(self):
-        return ' '.join(str(i.data) for i in self)
-    
-    def push(self,value,index=-1):
-        if not self.head:
-            n=dNode(value)
-            self.head=n
-            self.tail=n
-            self.len+=1
-        else:
-            if index==-1:
-                self.len+=1
-                self.tail.next=dNode(value,self.tail)
-                self.tail=self.tail.next
-            elif index==0:
-                self.head=dNode(value,None,self.head)
-                self.head.next.prev=self.head
-                self.len+=1
-            else:
-                i=self.head
-                j=1
-                while j<index-1:
-                    i=i.next
-                    j+=1
-                i.next=dNode(value,i,i.next)
-                i.next.next.prev=i.next
-                self.len+=1
-    
-    def rotate_cw(self,index: int):
-        assert index >=0 and int(index) == index and index < self.len, 'Invalid index given' 
-        href=self.head
-        i=0
-        j=self.head
-        while j:
-            j=j.next
-            i+=1
-            if i==index:
-                break
-
-        j.prev.next=None
-        last=j.prev
-        j.prev=None
-        self.head=j
-        self.tail.next=href
-        href.prev=self.tail
-        self.tail=last        
+    def __repr__(self) -> str:
+        return f'Node(data = {self.data})'
         
-    def printList(self):
-        if not self.head:
-            print('List is empty :(')
-        else:
-            print('Head',end='--> ')
-            i=self.head
-            while i.next:
-                print(i.data,end=' <==> ')
-                i=i.next
-            print(f'{self.tail.data} <-- Tail')
+    def __str__(self) -> str:
+        return f'Node(data = {self.data})'
 
-    def printReverse(self):
-        if not self.head:
-            print('List is empty :(')
-        else:
-            print('Tail',end='--> ')
-            i=self.tail
-            while i.prev:
-                print(i.data,end=' <==> ')
-                i=i.prev
-            print(f'{self.head.data} <-- Head')
-    
-    def searchIndex(self,Node_value):
-        if not self.head:
-            return 'No point in searching, Create a list first. Its empty'
-        i=0
-        for j in self:
-            if j.data==Node_value:
-                return i
-            i+=1
-        return f'No such node with the given value {Node_value} exists'      
-            
-    def searchByIndex(self,index: int):
-        if not self.head:
-            return 'No point in searching, Create a list first. Its empty'
-        i=1
-        j=self.head
-        while i<index:
-            j=j.next
-            i+=1
-        return j.data
-    
-    def pop(self,index: int = -1):
-        if index >= self.len:
-            print(' Enter a valid index!! INDEX IS 0 BASED')
-            return 
-        if not self.head:
-            print('Already empty')
-        else:
-            if index==-1 or index==self.len-1:
-                self.len-=1
-                temp=self.tail.data
-                self.tail=self.tail.prev
-                self.tail.next=None
-                return temp
-            elif index==0:
-                self.len-=1
-                temp=self.head.data
-                self.head=self.head.next
-                self.head.prev=None 
-                return temp
-            else:
-                self.len-=1
+
+class DoublyLinkedList(object):
+    def __init__(self,*e) -> None:
+        self.head = None
+        self.tail = None
+        self.__size:int = 0 
+        if e:
+            if type(e[0]) is range or list or tuple :
+                for i in e[0]:
+                    self.append(i)
+            else: 
+                for i in e:
+                    self.append(i)       
                 
-                i=self.head
-                j=0
-                while j<index-1:
-                    i=i.next
-                    j+=1
+    @property
+    def size(self):
+        return self.__size
 
-                temp=i.next.data
-                i.next=i.next.next
-                i.next.prev=i
-                return temp
+    def __len__(self)->int:
+        return self.__size 
+
+    def __str__(self) -> str:
+        s=''
+        for i in self:
+            s= s+ str(i.data) + ' '
+        return f'DLList([{s.rstrip()}])'
+    
+    def __repr__(self) -> str:
+        s = ''
+        for i in self:
+            s += i.__str__() + ' <=> '
+        return s.removesuffix(' <=> ')
+
+    def __iter__(self):
+        i = self.head 
+        while i:
+            yield i 
+            i=i.next 
 
 
-'''Circularly Doubly linked list'''
+    def __getitem__(self,index)->node:
+        if not 0<=index <self.__size: raise IndexError
+        i = self.head 
+        j=0 
+        while j<index:
+            i=i.next 
+            j+=1 
+        return i 
+        
+    
+    def __setitem__(self,index,data):
+        if not 0<=index <self.__size: raise IndexError
+        i = self.head 
+        j=0 
+        while j<index:
+            i=i.next 
+            j+=1 
+        i.data = data 
+        
+
+    def append(self,data):
+        if self.head is None: 
+            self.head = node(data)
+            self.tail = self.head 
+            self.__size+=1
+        else:
+            temp = self.tail
+            self.tail.next = node(data)
+            self.tail = self.tail.next 
+            self.tail.prev = temp
+            self.__size+=1
+
+    def pop(self):
+        if self.head is self.tail and self.head is not None: 
+             self.head = None 
+             self.tail = None 
+             self.__size-=1
+        elif self.tail is not None: 
+            temp = self.tail.prev 
+            temp.next = None 
+            self.tail.prev = None 
+            self.tail = temp
+            self.__size-=1 
+        else:
+            raise EmptyList
+
+    def reverse(self):
+        past = None 
+        present =  self.head 
+        while present: 
+            past = present.prev 
+            present.prev = present.next 
+            present.next = past 
+            present = present.prev
+
+        self.head, self.tail = self.tail, self.head  
+        
+
+'''------------Circularly Doubly linked list--------------'''
+
+        
 class CircularlyDLL:
     def __init__(self,iterable=None):
         self.head = None
@@ -173,7 +140,7 @@ class CircularlyDLL:
 
     def push(self,value,index=-1):
         if not self.head:
-            n=dNode(value)
+            n=node(value)
             n.next=n
             n.prev=n
             self.head=n
@@ -181,12 +148,12 @@ class CircularlyDLL:
             self.len+=1
         else:
             if index==-1:
-                self.tail.next=dNode(value,self.tail,self.head)
+                self.tail.next=node(value,self.tail,self.head)
                 self.tail=self.tail.next
                 self.head.prev=self.tail
                 self.len+=1
             elif index==0:
-                self.head=dNode(value,self.tail,self.head)
+                self.head=node(value,self.tail,self.head)
                 self.tail.next=self.head
                 self.len+=1
             else:
@@ -196,7 +163,7 @@ class CircularlyDLL:
                 while j<index-1:
                     i=i.next
                     j+=1
-                i.next=dNode(value,i,i.next)
+                i.next=node(value,i,i.next)
                 i.next.next.prev=i.next
                 pass
 
