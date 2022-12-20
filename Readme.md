@@ -1,5 +1,13 @@
 # Data Structures for python
-- ## Linked List
+
+## Installation
+Latest Version : 1.0.0
+python version needed: `>= 3.9`
+
+```
+pip install Gsauce-pyds
+```
+## Linked List
 ```python
 from dstructure.linkedlist import LinkedList
 l = LinkedList(range(8))
@@ -65,16 +73,118 @@ print(len(a))
 # 10
 ```
   
-- ## Doubly Linked List
-- ## Stack
-- ## Queue
-- ## Dequeue 
+## Doubly Linked List
 
-## Installation
-Latest Version : 1.0.0
+```python
+from dstructure.linkedlist import DoublyLinkedList
+
+l = DoublyLinkedList(range(4))
+print(l)
+# DLList([0 1 2 3])
+
+l.append(4)
+print(l,len(l))
+# DLList([0 1 2 3 4]) 5
+
+l.pop()
+print(l)
+# DLList([0 1 2 3])
+
+print(l.head,l[0],l.tail,l[3],sep='\t')
+# Node(data = 0)	Node(data = 0)	Node(data = 3)	Node(data = 3)
+
+l.reverse()
+print(l.head,l[0],l.tail,l[3],sep='\t')
+# Node(data = 3)	Node(data = 3)	Node(data = 0)	Node(data = 0)
+
+print(l.head.next,l.tail.prev)
+# Node(data = 2) Node(data = 1)
+
+print(l)
+l[2]='two'
+print(l)
+# DLList([3 2 1 0])
+# DLList([3 2 two 0])
+
+print(l[:2],l[2:])
+# DLList([3 2]) DLList([two 0])
+
 ```
-pip install Gsauce-pyds
+## Stack
+```python
+from dstructure.stack import Stack2
+
+s = Stack2(range(3))
+print(s,len(s))
+# Stack([0,1,2]) 3
+
+s.push(3)
+s.push(5)
+print(s,len(s))
+# Stack([0,1,2,3,5]) 5
+
+
+s.pop()
+print(s,len(s))
+# Stack([0,1,2,3]) 4
+
+print(s.peek)
+# 3
 ```
+
+## Queue
+```python
+from dstructure.queues import Queue
+
+s = Queue(range(4))
+print(s,len(s))
+# Queue([0,1,2,3]) 4
+
+s.enqueue('back')
+s.enqueue('to back')
+print(s,len(s))
+# Queue([0,1,2,3,back,to back]) 6
+
+s.dequeue()
+print(s,len(s))
+# Queue([1,2,3,back,to back]) 5
+
+print(s.isempty)
+# False
+
+for _ in range(len(s)):
+    s.dequeue()
+print(s.isempty,len(s),s)
+# True 0 Queue([])
+```
+## Dequeue 
+```python
+
+from dstructure.queues import Dequeue
+
+s = Dequeue(range(4))
+print(s,len(s))
+# Dequeue([0,1,2,3]) 4
+
+s.appendback('back')
+s.appendfront('front')
+print(s,len(s))
+# Dequeue([front,0,1,2,3,back]) 6
+
+s.popback()
+s.popfront()
+print(s,len(s))
+# Dequeue([0,1,2,3]) 4
+
+print(s.isempty)
+for _ in range(len(s)):
+    s.popback()
+print(s.isempty,s,len(s))
+
+# False
+# True Dequeue([]) 0
+```
+
 
 ## License
 

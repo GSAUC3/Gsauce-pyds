@@ -7,8 +7,7 @@ README = (HERE/"Readme.md").read_text()
 
 classifiers = [
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 3.9+',
     'License :: OSI Approved :: MIT License'
 
 ]
