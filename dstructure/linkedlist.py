@@ -59,13 +59,13 @@ class LinkedList(object):
 
     def __getitem__(self,index):
         if isinstance(index,slice):
-            if index.start<0:
+            __start = index.start if index.start is not None else 0
+            __stop = index.stop if index.stop is not None else self.__size
+            if __start<0:
                 raise IndexError
             new = LinkedList()
             j = self.head
             i = 0
-            __start = index.start if index.start is not None else 0
-            __stop = index.stop if index.stop is not None else self.__size
             while j:
                 if __start<=i<__stop:
                     new.append(j.data)
@@ -105,7 +105,8 @@ class LinkedList(object):
             self.tail = self.tail.next
 
     def pop(self)->None:
-        temp = self.tail.data
+        if self.tail is not None:
+            temp = self.tail.data
         if self.head is not None:
             if self.head.next is None:
                 self.head=None

@@ -8,3 +8,4 @@ __pycache__/
 *.cpp
 *.exe
 notebooks/
+dstructure/__pycache__/
