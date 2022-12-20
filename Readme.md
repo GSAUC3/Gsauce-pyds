@@ -72,6 +72,8 @@ print(len(a))
 # 12
 # 10
 ```
+
+`NOTE: to get the data of any LinkedList and DoublyLinkedList nodes use .data attribute | ex: l.head.data will return the actual value`
   
 ## Doubly Linked List
 
