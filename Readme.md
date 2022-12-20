@@ -7,6 +7,10 @@ python version needed: `>= 3.9`
 ```
 pip install Gsauce-pyds
 ```
+# Data Structures Implemented so far
+Linked List | Doubly linked list | Stacks | Queue | dequeue
+
+
 ## Linked List
 ```python
 from dstructure.linkedlist import LinkedList
