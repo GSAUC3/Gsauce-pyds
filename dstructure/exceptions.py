@@ -4,3 +4,6 @@ class EmptyList(Exception):
 
 class StackEmpty(Exception):
     pass 
+
+class EmptyDequeue(Exception):
+    pass 

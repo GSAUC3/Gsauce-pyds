@@ -1,6 +1,6 @@
 '''Stack using list or dynamic arrays'''
-from .linkedlist import LinkedList
-from .exceptions import StackEmpty
+from dstructure.linkedlist import LinkedList
+from dstructure.exceptions import StackEmpty
 
 class Stack:
     def __init__(self,*vals):
@@ -62,7 +62,7 @@ class Stack2(LinkedList):
         for i in self:
             s += str(i.data)+','
         s =s.removesuffix(',')
-        return f'Stack([{s}], top={self.tail.data}, size={len(self)})'
+        return f'Stack([{s}], size={len(self)})'
 
     @property
     def peek(self):
@@ -75,5 +75,5 @@ class Stack2(LinkedList):
         if len(self)==0:
             raise StackEmpty
         else:
-            super().pop()
+            return super().pop()
  

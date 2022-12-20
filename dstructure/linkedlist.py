@@ -1,7 +1,7 @@
 '''Author: Rajarshi Banerjee'''
 
 from typing import Optional,Any
-from exceptions import EmptyList
+from dstructure.exceptions import EmptyList
 from copy import deepcopy
 
 class Node:
@@ -30,7 +30,7 @@ class LinkedList(object):
         self.__size = 0
 
         if e:
-            if type(e[0]) is range or list or tuple :
+            if type(e[0]) is range or type(e[0]) is list or type(e[0]) is tuple:
                 for i in e[0]:
                     self.append(i)
             else: 
@@ -105,6 +105,7 @@ class LinkedList(object):
             self.tail = self.tail.next
 
     def pop(self)->None:
+        temp = self.tail.data
         if self.head is not None:
             if self.head.next is None:
                 self.head=None
@@ -116,6 +117,7 @@ class LinkedList(object):
                 i.next = None 
                 self.tail = i
             self.__size-=1
+            return temp
         else:
             raise EmptyList
     
@@ -146,6 +148,7 @@ class LinkedList(object):
             self.head = self.head.next
             j.next = None 
             self.__size-=1
+            return j.data
         else:
             while i<at-1:
                 j=j.next 
@@ -154,6 +157,7 @@ class LinkedList(object):
             j.next = temp.next
             temp.next=None 
             self.__size-=1
+            return temp.data
         
 
     def __add__(self,_o): 
