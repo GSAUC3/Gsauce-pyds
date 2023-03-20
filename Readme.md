@@ -7,6 +7,10 @@ python version needed: `>= 3.9`
 ```
 pip install Gsauce-pyds
 ```
+# Data Structures Implemented so far
+Linked List | Doubly linked list | Stacks | Queue | dequeue
+
+
 ## Linked List
 ```python
 from dstructure.linkedlist import LinkedList
@@ -72,6 +76,8 @@ print(len(a))
 # 12
 # 10
 ```
+
+`NOTE: to get the data of any LinkedList and DoublyLinkedList nodes use .data attribute | ex: l.head.data will return the actual value`
   
 ## Doubly Linked List
 
