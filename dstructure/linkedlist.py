@@ -270,7 +270,40 @@ class CircularList:
             j.next = new 
             self.__size+=1
             
-#--------------------------------------------------------
+#------INSERTION SORT IN-PLACE--------------------------------------------------
+def InsertionSort(head):
+    '''
+    Sorts elements in ASCENDING order
+    this is inplace insertion sort for linkedlist
+    time complexity O(N^2)
+    it takes only three pointers
+    '''
+    if head is None:return 
+    # no point of  sorting an empty list duh!!!
+    i = head
+    def sort(i):
+        # insertion sort
+        if i.next is None:
+            # base case if your pointer points to the last node
+            # that means your list is already sorted congrats, you did it
+            return 
+        min_node = i 
+        # node that points to the minimum node of the link list
+        j=i
+        # make another pointer to the first node of the unsorted list
+        # now we will find the minimum node of that unsorted array
+        while j:
+            if j.val <min_node.val:
+                # update the min_node such that it points to the minimum valued node
+                # of the unsorted list
+                min_node = j
+            j=j.next 
+        i.val,min_node.val = min_node.val,i.val # swap the two values
+        sort(i.next) #call the sorting by passing a pointer to the next node of the list
+    sort(i)
+
+
+
 # -------------------DOUBLY LINKED LIST------------------------------------------
 #--------------------------------------------------------
 
@@ -514,3 +547,98 @@ class CircularlyDLL:
                 i=i.prev
                 j-=1
             print('')
+
+
+
+# --------------------------------------------------------
+# polynmial, to be Implemented
+# from typing import Union
+
+# trans = str.maketrans("0123456789ij-", "⁰¹²³⁴⁵⁶⁷⁸⁹ⁱʲ⁻")
+    
+# class poly:
+#     def __init__(self,var:str='x',coefficients:Union[float,int]=0,
+#                 power:Union[float,int]=1,next_node=None):
+#         self.var = var
+#         self.co = coefficients
+#         self.po = power
+#         self.next = next_node
+
+#     def __str__(self):
+#         if self.var==' ':
+#             return str(self.co)
+#         elif self.po==1 and self.var:
+#             return f'{self.co}{self.var}'
+#         else:
+#             return f"{self.co}{self.var}" + f"{self.po}".translate(trans) 
+
+#     def __repr__(self):
+#         return f'{self.co}' if self.var==' ' else f"{self.co}{self.var}" + f"{self.po}".translate(trans) 
+
+        
+# import re
+# class Polynomial:
+#     def __init__(self,s:str=None):
+#         '''
+#         >>> p = Polynomial('x2 -2x +1')
+#         '''
+#         self.head=None
+#         self.tail=None
+#         self.__size = 0
+#         if s:
+#             s = re.findall(r"[-+]?\d*[.]?\d*\w\d*[.]?\d*", s)
+        
+#             for i in s:
+#                 var = re.findall(f'[a-zA-Z]',i)
+#                 a = re.split(r'[a-zA-Z]',i)
+#                 l=[]
+#                 for j in a:
+#                     if j =='-':
+#                         l.append(-1)
+#                     elif j=='+':
+#                         l.append(1)
+#                     else:
+#                         l.append(j if j else 1)
+#                 if var:
+#                     self.append(var[0],l[0],l[1])
+#                 else:
+#                     self.append(' ',l[0],0)
+            
+
+#     def __str__(self) -> str:
+#         return ' '.join(i.__str__() for i in self)
+    
+#     def __repr__(self) -> str:
+#         return ' '.join(i.__repr__() for i in self)
+    
+#     def __iter__(self):
+#         i=self.head 
+#         while i:
+#             yield i 
+#             i=i.next 
+
+#     def append(self,var,co,po)->None:
+#         self.__size+=1
+#         if self.head is None:
+#             self.head = poly(var,co,po)
+#             self.tail = self.head 
+#         else:
+#             self.tail.next = poly(var,co,po)
+#             self.tail = self.tail.next
+    
+#     def __add__(self,o):
+#         pass 
+
+#     def __mul__(self,o):
+#         new = Polynomial()
+#         i = self.head 
+#         j = o.head
+#         while i:
+#             while j:
+#                 po = float(i.po)+float(j.po)
+#                 co = float(i.co) * float(j.co)
+#                 new.append(i.var,str(co),str(po))
+#                 j=j.next
+#             j = o.head
+#             i=i.next
+#         return new

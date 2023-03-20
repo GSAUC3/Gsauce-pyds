@@ -1,8 +1,11 @@
 import math
-# from Q import Queue
 from collections import deque
 
+class Tnode(object):
+    def __init__(self) -> None:
+        pass
 
+    # ________________________________________________________________
 class btnode:
     def __init__(self, data, left_child=None, right_child=None):
         self.data = data
@@ -66,20 +69,6 @@ class binaryTree:
             print()
 
         if order == 'level':
-            # if self.root is None:
-            #     return
-            # node=self.root
-            # q=Queue()
-            # q.push(node)
-            # while q:
-            #     node=q.pop_front()
-
-            #     print(node.data,end=' ')
-            #     if node.left:
-            #         q.push(node.left)
-            #     if node.right:
-            #         q.push(node.right)
-
             if self.root is None:
                 return
             node = self.root
@@ -211,6 +200,3 @@ class BST:
                 return True
             return False
 
-
-t = BST([10,20,5,51,50,-1])
-print(t.ceil(40))
