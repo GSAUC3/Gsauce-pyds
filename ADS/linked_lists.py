@@ -87,7 +87,7 @@ class SLL:
             i = i.next
 
 
-    def __getitem__(self, index):
+    def __getitem__(self, index:int):
         assert index>=0, 'index should be positive'
         if index>=self.__size:
             raise IndexError('Index is larger than length')
@@ -262,6 +262,30 @@ class DLL:
             yield i
             i = i.next
 
+
+    def  __getitem__(self, index:int):
+        # if index is <0 start from tail
+        if not isinstance(index, int):
+            raise TypeError(f"Expected an integer, but got {type(index).__name__}")
+        
+        if index >= self.__size:
+            raise IndexError('Index is out of bounds')
+        if index>=0:
+            curr = self.__head
+            i = 0
+            while i < index:
+                curr = curr.next
+                i+=1
+            return curr
+        else:
+            i = 1
+            curr = self.__tail
+            while i<abs(index):
+                curr = curr.prev
+                i+=1
+            return curr
+
+
     def append(self, value: Any):
         if self.__size <1:
             self.__head = DLLNode(value)
@@ -290,3 +314,24 @@ class DLL:
         return temp
 
 
+    def insert(self, value: Any, index:int=0):
+        if not isinstance(index, int):
+            raise TypeError(f"Expected an integer, but got {type(index).__name__}")
+
+
+        
+
+
+    def remove(self, index:int = 0) -> DLLNode | None:
+        if not isinstance(index, int):
+            raise TypeError(f"Expected an integer, but got {type(index).__name__}")
+
+
+
+class CircularLinkedList:
+    def __init__(self, *args):
+        self.__head = None
+        self.__tail = None
+        self.__size = None
+
+        

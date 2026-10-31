@@ -4,6 +4,7 @@ This is the checklist to master before tackling Linked List Medium/Hard problems
 
 ## 1. Core topics checklist
 
+https://chatgpt.com/c/6ae291cf-5c2c-83e8-a50e-50d883761226
 
 ## Your study checklist
 
