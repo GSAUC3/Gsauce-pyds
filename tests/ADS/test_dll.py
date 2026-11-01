@@ -3,479 +3,519 @@ import pytest
 from ADS.linked_lists import DLL, DLLNode
 
 
-# ============================================================
-# 1. CONSTRUCTION
-# ============================================================
+"""
+Tests for the DLL implementation in ADS/linked_lists.py.
 
-def test_empty_dll():
-    ll = DLL()
+Run from the repository root:
+    python -m pytest tests/ADS/test_dll.py -v
 
-    assert len(ll) == 0
-    assert ll.size == 0
-    assert ll.head is None
-    assert ll.tail is None
+Assumed public API:
+    DLL(*values)
+    dll.append(value)
+    dll.pop()                 # removes and returns the tail node
+    dll.insert(value, index=0)
+    dll.remove(index=0)       # removes and returns the node at index
+    dll.extend(other_dll)     # appends the other list's values; does not mutate it
+    dll[index]                # supports positive and Python-style negative indices
 
+The tests deliberately check node identity and both directions of every link,
+not just the values produced by iteration.
+"""
 
-def test_single_element_constructor():
-    ll = DLL(10)
 
-    assert len(ll) == 1
-    assert ll.head.val == 10
-    assert ll.tail.val == 10
-    assert ll.head is ll.tail
+def values(dll):
+    """Return the values in a DLL without relying on its __str__ method."""
+    return [node.val for node in dll]
 
 
-def test_multiple_element_constructor():
-    ll = DLL(10, 20, 30)
+def assert_dll_invariants(dll, expected_values):
+    """Check size, endpoints, forward links, backward links, and iteration."""
+    expected_values = list(expected_values)
+    expected_size = len(expected_values)
 
-    assert len(ll) == 3
-    assert [node.val for node in ll] == [10, 20, 30]
+    assert len(dll) == expected_size
+    assert dll.size == expected_size
+    assert values(dll) == expected_values
 
+    if expected_size == 0:
+        assert dll.head is None
+        assert dll.tail is None
+        return
 
-def test_constructor_preserves_order():
-    ll = DLL(1, 2, 3, 4, 5)
+    assert dll.head is not None
+    assert dll.tail is not None
+    assert dll.head.prev is None
+    assert dll.tail.next is None
 
-    assert [node.val for node in ll] == [1, 2, 3, 4, 5]
+    # Walk forward and verify every prev/next relationship.
+    current = dll.head
+    previous = None
+    forward_nodes = []
 
+    while current is not None:
+        assert current.prev is previous
+        forward_nodes.append(current)
+        previous = current
+        current = current.next
 
-# ============================================================
-# 2. NODE
-# ============================================================
+    assert len(forward_nodes) == expected_size
+    assert forward_nodes[0] is dll.head
+    assert forward_nodes[-1] is dll.tail
 
-def test_dll_node_initialization():
-    node = DLLNode(10)
+    # Walk backward and verify that we visit the exact same nodes in reverse.
+    current = dll.tail
+    following = None
+    backward_nodes = []
 
-    assert node.val == 10
-    assert node.next is None
-    assert node.prev is None
+    while current is not None:
+        assert current.next is following
+        backward_nodes.append(current)
+        following = current
+        current = current.prev
 
+    assert len(backward_nodes) == expected_size
+    assert backward_nodes == forward_nodes[::-1]
 
-def test_dll_node_forward_linking():
-    second = DLLNode(20)
-    first = DLLNode(10, next_node=second)
 
-    assert first.next is second
+@pytest.fixture
+def empty_dll():
+    return DLL()
 
 
-def test_dll_node_backward_linking():
-    first = DLLNode(10)
-    second = DLLNode(20, prev_node=first)
+@pytest.fixture
+def populated_dll():
+    return DLL(10, 20, 30, 40)
 
-    assert second.prev is first
 
+# ---------------------------------------------------------------------------
+# Construction and basic interface
+# ---------------------------------------------------------------------------
 
-def test_dll_node_bidirectional_linking():
-    first = DLLNode(10)
-    second = DLLNode(20, prev_node=first)
+def test_empty_constructor(empty_dll):
+    assert_dll_invariants(empty_dll, [])
 
-    first.next = second
 
-    assert first.next is second
-    assert second.prev is first
+def test_constructor_with_multiple_values(populated_dll):
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40])
 
 
-def test_dll_node_string_representation():
-    node = DLLNode(10)
+def test_constructor_with_one_value():
+    dll = DLL(42)
+    assert_dll_invariants(dll, [42])
 
-    assert str(node) == "10"
 
+def test_constructor_preserves_values_as_single_items():
+    # A list passed as one argument should remain one value, not be unpacked.
+    payload = [1, 2, 3]
+    dll = DLL(payload)
 
-def test_dll_node_repr():
-    node = DLLNode(10)
+    assert len(dll) == 1
+    assert dll.head.val is payload
+    assert dll.tail is dll.head
 
-    assert repr(node) == "Node(None) <=> Node(10) <=> Node(None)"
 
+def test_public_endpoint_and_size_properties(populated_dll):
+    assert populated_dll.head is not None
+    assert populated_dll.tail is not None
+    assert populated_dll.size == 4
 
-def test_dll_node_repr_with_neighbours():
-    first = DLLNode(10)
-    middle = DLLNode(20, prev_node=first)
-    last = DLLNode(30, prev_node=middle)
 
-    first.next = middle
-    middle.next = last
+def test_read_only_public_properties(populated_dll):
+    # Public properties should not be assignable.
+    with pytest.raises(AttributeError):
+        populated_dll.head = None
 
-    assert repr(middle) == "Node(10) <=> Node(20) <=> Node(30)"
+    with pytest.raises(AttributeError):
+        populated_dll.tail = None
 
+    with pytest.raises(AttributeError):
+        populated_dll.size = 100
 
-# ============================================================
-# 3. PROPERTIES AND SPECIAL METHODS
-# ============================================================
 
-def test_size_property():
-    ll = DLL(1, 2, 3)
+# ---------------------------------------------------------------------------
+# Iteration and string representations
+# ---------------------------------------------------------------------------
 
-    assert ll.size == 3
+def test_iteration_yields_nodes(populated_dll):
+    nodes = list(populated_dll)
 
+    assert len(nodes) == 4
+    assert [node.val for node in nodes] == [10, 20, 30, 40]
+    assert nodes[0] is populated_dll.head
+    assert nodes[-1] is populated_dll.tail
 
-def test_len():
-    ll = DLL(1, 2, 3, 4)
 
-    assert len(ll) == 4
+def test_iteration_over_empty_list(empty_dll):
+    assert list(empty_dll) == []
 
 
-def test_string_representation():
-    ll = DLL(1, 2, 3)
+def test_str_representation(populated_dll):
+    assert str(populated_dll) == "LinkedList([10, 20, 30, 40])"
 
-    assert str(ll) == "LinkedList([1, 2, 3])"
 
+def test_str_representation_of_empty_list(empty_dll):
+    assert str(empty_dll) == "LinkedList([])"
 
-def test_repr():
-    ll = DLL(1, 2, 3)
 
-    assert repr(ll) == "1 <=> 2 <=> 3"
+def test_repr_contains_each_node_once(populated_dll):
+    representation = repr(populated_dll)
 
+    # Avoid assuming a particular DLLNode.__str__ formatting.
+    for value in (10, 20, 30, 40):
+        assert str(value) in representation
 
-def test_empty_string_representation():
-    ll = DLL()
+    assert representation.count("<=>") == 3
 
-    assert str(ll) == "LinkedList([])"
-    assert repr(ll) == ""
 
+# ---------------------------------------------------------------------------
+# Indexing
+# ---------------------------------------------------------------------------
 
-# ============================================================
-# 4. ITERATION
-# ============================================================
+@pytest.mark.parametrize(
+    ("index", "expected"),
+    [
+        (0, 10),
+        (1, 20),
+        (2, 30),
+        (3, 40),
+        (-1, 40),
+        (-2, 30),
+        (-3, 20),
+        (-4, 10),
+    ],
+)
+def test_getitem_valid_indices(populated_dll, index, expected):
+    assert populated_dll[index].val == expected
 
-def test_iteration():
-    ll = DLL(1, 2, 3)
 
-    assert [node.val for node in ll] == [1, 2, 3]
+@pytest.mark.parametrize("index", [4, 5, -5, -100])
+def test_getitem_out_of_range(populated_dll, index):
+    with pytest.raises(IndexError):
+        _ = populated_dll[index]
 
 
-def test_iteration_empty_list():
-    ll = DLL()
+@pytest.mark.parametrize("index", [1.5, "1", None, (1,)])
+def test_getitem_rejects_non_integer_indices(populated_dll, index):
+    with pytest.raises(TypeError):
+        _ = populated_dll[index]
 
-    assert list(ll) == []
 
-
-def test_iteration_returns_nodes():
-    ll = DLL(1, 2, 3)
-
-    nodes = list(ll)
-
-    assert all(isinstance(node, DLLNode) for node in nodes)
-
-
-def test_iteration_preserves_node_identity():
-    ll = DLL(1, 2, 3)
-
-    nodes = list(ll)
-
-    assert nodes[0] is ll.head
-    assert nodes[-1] is ll.tail
-
-
-# ============================================================
-# 5. APPEND
-# ============================================================
-
-def test_append_to_empty_list():
-    ll = DLL()
-
-    ll.append(10)
-
-    assert len(ll) == 1
-    assert ll.head.val == 10
-    assert ll.tail.val == 10
-    assert ll.head is ll.tail
-
-
-def test_append_multiple_elements():
-    ll = DLL()
-
-    for value in [10, 20, 30]:
-        ll.append(value)
-
-    assert [node.val for node in ll] == [10, 20, 30]
-    assert len(ll) == 3
-
-
-def test_append_updates_tail():
-    ll = DLL(10, 20)
-
-    old_tail = ll.tail
-
-    ll.append(30)
-
-    assert ll.tail.val == 30
-    assert old_tail.next is ll.tail
-
-
-def test_append_updates_previous_pointer():
-    ll = DLL(10, 20)
-
-    old_tail = ll.tail
-
-    ll.append(30)
-
-    assert ll.tail.prev is old_tail
-
-
-def test_append_updates_size():
-    ll = DLL(10, 20)
-
-    ll.append(30)
-
-    assert ll.size == 3
-
-
-def test_append_preserves_head():
-    ll = DLL(10, 20)
-
-    old_head = ll.head
-
-    ll.append(30)
-
-    assert ll.head is old_head
-
-
-def test_append_none_value():
-    ll = DLL()
-
-    ll.append(None)
-
-    assert len(ll) == 1
-    assert ll.head.val is None
-
-
-# ============================================================
-# 6. POP
-# ============================================================
-
-def test_pop_from_empty_list():
-    ll = DLL()
+def test_getitem_on_empty_list(empty_dll):
+    with pytest.raises(IndexError):
+        _ = empty_dll[0]
 
     with pytest.raises(IndexError):
-        ll.pop()
+        _ = empty_dll[-1]
+
+
+# ---------------------------------------------------------------------------
+# append
+# ---------------------------------------------------------------------------
+
+def test_append_to_empty_list(empty_dll):
+    result = empty_dll.append(10)
+
+    assert result is None
+    assert_dll_invariants(empty_dll, [10])
+
+
+def test_append_to_nonempty_list(populated_dll):
+    old_tail = populated_dll.tail
+
+    populated_dll.append(50)
+
+    assert populated_dll.tail is not old_tail
+    assert populated_dll.tail.prev is old_tail
+    assert old_tail.next is populated_dll.tail
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40, 50])
+
+
+def test_append_multiple_values():
+    dll = DLL()
+
+    for value in range(10):
+        dll.append(value)
+
+    assert_dll_invariants(dll, list(range(10)))
+
+
+# ---------------------------------------------------------------------------
+# pop
+# ---------------------------------------------------------------------------
+
+def test_pop_from_empty_list(empty_dll):
+    with pytest.raises(IndexError):
+        empty_dll.pop()
+
+    assert_dll_invariants(empty_dll, [])
 
 
 def test_pop_single_element():
-    ll = DLL(10)
+    dll = DLL(10)
+    removed = dll.pop()
 
-    removed = ll.pop()
-
+    assert isinstance(removed, DLLNode)
     assert removed.val == 10
-    assert len(ll) == 0
-    assert ll.head is None
-    assert ll.tail is None
+    assert removed.prev is None
+    assert removed.next is None
+    assert_dll_invariants(dll, [])
 
 
-def test_pop_two_elements():
-    ll = DLL(10, 20)
+def test_pop_from_multiple_elements(populated_dll):
+    old_tail = populated_dll.tail
+    new_tail = old_tail.prev
 
-    removed = ll.pop()
+    removed = populated_dll.pop()
+
+    assert removed is old_tail
+    assert removed.val == 40
+    assert removed.prev is None
+    assert removed.next is None
+    assert new_tail is populated_dll.tail
+    assert new_tail.next is None
+    assert_dll_invariants(populated_dll, [10, 20, 30])
+
+
+def test_pop_until_empty(populated_dll):
+    removed_values = []
+
+    while len(populated_dll):
+        removed_values.append(populated_dll.pop().val)
+        assert_dll_invariants(populated_dll, [10, 20, 30, 40][:len(populated_dll)])
+
+    assert removed_values == [40, 30, 20, 10]
+    assert_dll_invariants(populated_dll, [])
+
+
+# ---------------------------------------------------------------------------
+# insert
+# API assumed: insert(value, index=0)
+# Valid insertion positions are 0 through len(dll), inclusive.
+# ---------------------------------------------------------------------------
+
+def test_insert_into_empty_list():
+    dll = DLL()
+    dll.insert(10, index=0)
+
+    assert_dll_invariants(dll, [10])
+
+
+def test_insert_at_head(populated_dll):
+    populated_dll.insert(5, index=0)
+
+    assert_dll_invariants(populated_dll, [5, 10, 20, 30, 40])
+
+
+def test_insert_in_middle(populated_dll):
+    populated_dll.insert(25, index=2)
+
+    assert_dll_invariants(populated_dll, [10, 20, 25, 30, 40])
+
+
+def test_insert_at_end(populated_dll):
+    populated_dll.insert(50, index=4)
+
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40, 50])
+
+
+def test_insert_at_end_of_empty_list():
+    dll = DLL()
+    dll.insert(10, index=0)
+
+    assert_dll_invariants(dll, [10])
+
+
+@pytest.mark.parametrize("index", [-1, -5, 5, 100])
+def test_insert_rejects_invalid_indices(populated_dll, index):
+    with pytest.raises(IndexError):
+        populated_dll.insert(99, index=index)
+
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40])
+
+
+@pytest.mark.parametrize("index", [1.5, "1", None])
+def test_insert_rejects_non_integer_indices(populated_dll, index):
+    with pytest.raises(TypeError):
+        populated_dll.insert(99, index=index)
+
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40])
+
+
+# ---------------------------------------------------------------------------
+# remove
+# API assumed: remove(index=0), returning the detached removed node.
+# ---------------------------------------------------------------------------
+
+def test_remove_from_empty_list(empty_dll):
+    with pytest.raises((IndexError, ValueError)):
+        empty_dll.remove()
+
+    assert_dll_invariants(empty_dll, [])
+
+
+def test_remove_only_element():
+    dll = DLL(10)
+    removed = dll.remove(0)
+
+    assert isinstance(removed, DLLNode)
+    assert removed.val == 10
+    assert removed.prev is None
+    assert removed.next is None
+    assert_dll_invariants(dll, [])
+
+
+def test_remove_head(populated_dll):
+    old_head = populated_dll.head
+
+    removed = populated_dll.remove(0)
+
+    assert removed is old_head
+    assert removed.val == 10
+    assert removed.prev is None
+    assert removed.next is None
+    assert populated_dll.head.prev is None
+    assert_dll_invariants(populated_dll, [20, 30, 40])
+
+
+def test_remove_middle(populated_dll):
+    removed = populated_dll.remove(1)
 
     assert removed.val == 20
-    assert ll.head.val == 10
-    assert ll.tail.val == 10
-    assert len(ll) == 1
-
-
-def test_pop_multiple_elements():
-    ll = DLL(10, 20, 30, 40)
-
-    removed = ll.pop()
-
-    assert removed.val == 40
-    assert [node.val for node in ll] == [10, 20, 30]
-
-
-def test_pop_updates_tail():
-    ll = DLL(10, 20, 30)
-
-    ll.pop()
-
-    assert ll.tail.val == 20
-
-
-def test_pop_updates_previous_pointer():
-    ll = DLL(10, 20, 30)
-
-    ll.pop()
-
-    assert ll.tail.prev.val == 10
-
-
-def test_pop_updates_new_tail_next():
-    ll = DLL(10, 20, 30)
-
-    ll.pop()
-
-    assert ll.tail.next is None
-
-
-def test_pop_updates_size():
-    ll = DLL(10, 20, 30)
-
-    ll.pop()
-
-    assert len(ll) == 2
-    assert ll.size == 2
-
-
-def test_pop_detaches_removed_node():
-    ll = DLL(10, 20, 30)
-
-    removed = ll.pop()
-
-    assert removed.next is None
     assert removed.prev is None
+    assert removed.next is None
+    assert_dll_invariants(populated_dll, [10, 30, 40])
 
 
-def test_pop_until_empty():
-    ll = DLL(10, 20, 30)
+def test_remove_tail(populated_dll):
+    old_tail = populated_dll.tail
 
-    ll.pop()
-    ll.pop()
-    ll.pop()
+    removed = populated_dll.remove(3)
 
-    assert len(ll) == 0
-    assert ll.head is None
-    assert ll.tail is None
-
-
-# ============================================================
-# 7. POINTER INTEGRITY
-# ============================================================
-
-def test_head_previous_is_none():
-    ll = DLL(10, 20, 30)
-
-    assert ll.head.prev is None
+    assert removed is old_tail
+    assert removed.val == 40
+    assert removed.prev is None
+    assert removed.next is None
+    assert populated_dll.tail.next is None
+    assert_dll_invariants(populated_dll, [10, 20, 30])
 
 
-def test_tail_next_is_none():
-    ll = DLL(10, 20, 30)
+@pytest.mark.parametrize("index", [-1, 4, 100])
+def test_remove_rejects_invalid_indices(populated_dll, index):
+    with pytest.raises(IndexError):
+        populated_dll.remove(index)
 
-    assert ll.tail.next is None
-
-
-def test_forward_links():
-    ll = DLL(10, 20, 30)
-
-    first, second, third = list(ll)
-
-    assert first.next is second
-    assert second.next is third
-    assert third.next is None
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40])
 
 
-def test_backward_links():
-    ll = DLL(10, 20, 30)
+@pytest.mark.parametrize("index", [1.5, "1", None])
+def test_remove_rejects_non_integer_indices(populated_dll, index):
+    with pytest.raises(TypeError):
+        populated_dll.remove(index)
 
-    first, second, third = list(ll)
-
-    assert third.prev is second
-    assert second.prev is first
-    assert first.prev is None
+    assert_dll_invariants(populated_dll, [10, 20, 30, 40])
 
 
-def test_bidirectional_links():
-    ll = DLL(10, 20, 30)
+# ---------------------------------------------------------------------------
+# extend
+# Assumed contract: append copies of the source values, leaving source intact.
+# ---------------------------------------------------------------------------
 
-    first, second, third = list(ll)
+def test_extend_nonempty_list():
+    target = DLL(1, 2)
+    source = DLL(3, 4)
 
-    assert first.next.prev is first
-    assert second.next.prev is second
-    assert third.prev.next is third
+    target.extend(source)
 
+    assert_dll_invariants(target, [1, 2, 3, 4])
+    assert_dll_invariants(source, [3, 4])
 
-def test_all_nodes_have_correct_neighbours():
-    ll = DLL(10, 20, 30, 40, 50)
-
-    nodes = list(ll)
-
-    for i, node in enumerate(nodes):
-
-        expected_prev = nodes[i - 1] if i > 0 else None
-        expected_next = nodes[i + 1] if i < len(nodes) - 1 else None
-
-        assert node.prev is expected_prev
-        assert node.next is expected_next
+    # The two lists should not share nodes.
+    target_nodes = {id(node) for node in target}
+    source_nodes = {id(node) for node in source}
+    assert target_nodes.isdisjoint(source_nodes)
 
 
-def test_single_node_pointer_invariants():
-    ll = DLL(10)
+def test_extend_empty_target():
+    target = DLL()
+    source = DLL(1, 2, 3)
 
-    assert ll.head is ll.tail
-    assert ll.head.prev is None
-    assert ll.head.next is None
+    target.extend(source)
 
-
-def test_pointer_integrity_after_multiple_appends():
-    ll = DLL()
-
-    for value in range(10):
-        ll.append(value)
-
-    nodes = list(ll)
-
-    for i in range(len(nodes) - 1):
-        assert nodes[i].next is nodes[i + 1]
-        assert nodes[i + 1].prev is nodes[i]
+    assert_dll_invariants(target, [1, 2, 3])
+    assert_dll_invariants(source, [1, 2, 3])
 
 
-def test_pointer_integrity_after_multiple_pops():
-    ll = DLL(1, 2, 3, 4, 5)
+def test_extend_empty_source():
+    target = DLL(1, 2)
+    source = DLL()
 
-    ll.pop()
-    ll.pop()
+    target.extend(source)
 
-    nodes = list(ll)
-
-    assert [node.val for node in nodes] == [1, 2, 3]
-
-    for i in range(len(nodes) - 1):
-        assert nodes[i].next is nodes[i + 1]
-        assert nodes[i + 1].prev is nodes[i]
-
-    assert ll.head.prev is None
-    assert ll.tail.next is None
+    assert_dll_invariants(target, [1, 2])
+    assert_dll_invariants(source, [])
 
 
-# ============================================================
-# 8. MIXED OPERATIONS
-# ============================================================
+def test_extend_with_empty_target_and_empty_source():
+    target = DLL()
+    source = DLL()
 
-def test_append_and_pop_sequence():
-    ll = DLL()
+    target.extend(source)
 
-    ll.append(10)
-    ll.append(20)
-    ll.pop()
-    ll.append(30)
-
-    assert [node.val for node in ll] == [10, 30]
-    assert len(ll) == 2
+    assert_dll_invariants(target, [])
+    assert_dll_invariants(source, [])
 
 
-def test_repeated_append_and_pop():
-    ll = DLL()
+def test_extend_does_not_share_mutable_values():
+    # This checks node ownership, not deep-copying of the values themselves.
+    payload = {"items": [1]}
+    source = DLL(payload)
+    target = DLL()
 
-    for i in range(100):
-        ll.append(i)
+    target.extend(source)
 
-    for i in range(50):
-        ll.pop()
-
-    assert len(ll) == 50
-    assert ll.head.val == 0
-    assert ll.tail.val == 49
-
-    nodes = list(ll)
-
-    for i in range(len(nodes) - 1):
-        assert nodes[i].next.prev is nodes[i]
+    assert target.head is not source.head
+    assert target.head.val is payload
+    assert source.head.val is payload
 
 
-def test_empty_list_can_be_reused():
-    ll = DLL(10)
+def test_extend_self_is_rejected_without_corrupting_list():
+    dll = DLL(1, 2, 3)
 
-    ll.pop()
-    ll.append(20)
+    with pytest.raises((ValueError, TypeError)):
+        dll.extend(dll)
 
-    assert len(ll) == 1
-    assert ll.head is ll.tail
-    assert ll.head.val == 20
-    assert ll.head.prev is None
-    assert ll.head.next is None
+    assert_dll_invariants(dll, [1, 2, 3])
+
+
+# ---------------------------------------------------------------------------
+# Mixed operations: useful for catching bugs that isolated tests miss.
+# ---------------------------------------------------------------------------
+
+def test_mixed_operations_preserve_all_invariants():
+    dll = DLL()
+
+    dll.append(10)
+    assert_dll_invariants(dll, [10])
+
+    dll.append(30)
+    assert_dll_invariants(dll, [10, 30])
+
+    dll.insert(20, index=1)
+    assert_dll_invariants(dll, [10, 20, 30])
+
+    removed = dll.remove(1)
+    assert removed.val == 20
+    assert_dll_invariants(dll, [10, 30])
+
+    dll.insert(5, index=0)
+    assert_dll_invariants(dll, [5, 10, 30])
+
+    popped = dll.pop()
+    assert popped.val == 30
+    assert_dll_invariants(dll, [5, 10])
+
+    dll.remove(0)
+    assert_dll_invariants(dll, [10])
+
+    dll.pop()
+    assert_dll_invariants(dll, [])

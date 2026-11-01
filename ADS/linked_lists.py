@@ -1,6 +1,6 @@
 from __future__ import annotations
+from abc import ABC, abstractmethod
 from typing import Any
-from copy import deepcopy
 
 
 class SLLNode:
@@ -43,35 +43,86 @@ class DLLNode:
     def __str__(self):
         return f"{self.val}"
 
-class SLL:
+
+class LinkedList(ABC):
+    def __init__(self, *args):
+        self._head = None
+        self._tail = None
+        self._size = 0
+
+        if args:
+            for i in args:
+                self.append(i)
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def head(self):
+        return self._head
+
+    @property
+    def tail(self):
+        return self._tail
+    
+    def __len__(self):
+        return self._size
+
+    
+    def __iter__(self):
+        i = self._head
+        while i:
+            yield i
+            i = i.next
+
+
+    def __getitem__(self, index:int):
+
+        if not isinstance(index, int):
+            raise TypeError("Index must be an integer")
+
+        if index < 0 or index >= self._size:
+            raise IndexError("Index out of range")
+
+        curr = self._head
+        for _ in range(index):
+            curr = curr.next
+        return curr
+
+
+    @abstractmethod
+    def __add__(self, obj):...
+
+
+    @abstractmethod
+    def append(self, value: Any) -> None:...
+
+    @abstractmethod
+    def pop(self):...
+
+
+    @abstractmethod
+    def insert(self, index: int = 0):...
+
+
+    @abstractmethod
+    def remove(self, index: int = 0):...
+
+    @abstractmethod
+    def extend(self, obj):...
+
+
+
+
+class SLL(LinkedList):
     """
     Singly Linked List
     """
     def __init__(self, *args):
         """Initialize from k values in O(k) time by appending each value."""
-        self.__head = None
-        self.__tail = None
-        self.__size = 0 # total number of nodes 
+        super().__init__(*args)    
 
-        if args:
-            for i in args:
-                self.append(i)
-        
-
-    @property
-    def size(self):
-        return self.__size
-
-    @property
-    def head(self):
-        return self.__head
-
-    @property
-    def tail(self):
-        return self.__tail
-    
-    def __len__(self):
-        return self.__size
 
     def __str__(self) -> str:
         return 'LinkedList(['+', '.join(str(i.val) for i in self)+'])'
@@ -80,27 +131,8 @@ class SLL:
         return ' -> '.join(i.__str__() for i in self)
 
 
-    def __iter__(self):
-        i = self.__head
-        while i:
-            yield i
-            i = i.next
-
-
-    def __getitem__(self, index:int):
-        assert index>=0, 'index should be positive'
-        if index>=self.__size:
-            raise IndexError('Index is larger than length')
-        i = 0
-        curr = self.__head
-        while i<index:
-            curr = curr.next
-            i+=1
-        return curr
-
 
     def __add__(self, obj):
-        """Deep-copy and concatenate m nodes in O(m) time, plus value-copy costs."""
         if not isinstance(obj,SLL):
             return NotImplemented        
 
@@ -120,134 +152,104 @@ class SLL:
             return 
         
 
-        if self.__head is None:
-            ''' 
-            these 3 are invariants which should stay
-            constant throughout the program, 
-            no matter what
-            '''
-            self.__head = new_list.head
-            self.__tail = new_list.tail
-            self.__size = len(new_list)
-        else:
-            self.__tail = new_list.head
-            self.__tail = new_list.tail
-            self.__size +=len(new_list)
+        extended = self.__add__(new_list)
+        self._head = extended.head
+        self._tail = extended.tail
+        self._size = len(extended)
 
-        new_list.__head = None
-        new_list.__tail = None
-        new_list.__size = 0
+
 
         
     def append(self, value: Any):
         """Add a node at the tail in O(1) time using the tail reference."""
-        if self.__size <1:
-            self.__head = SLLNode(value = value)
-            self.__tail = self.__head
+        if self._size <1:
+            self._head = SLLNode(value = value)
+            self._tail = self._head
         else:
-            self.__tail.next = SLLNode(value=value)
-            self.__tail = self.__tail.next
-        self.__size+=1
+            self._tail.next = SLLNode(value=value)
+            self._tail = self._tail.next
+        self._size+=1
 
     def add_front(self, value: Any):
         """Add a node at the head in O(1) time."""
-        new_node = SLLNode(value = value, next_node = self.__head)
-        self.__head = new_node
+        new_node = SLLNode(value = value, next_node = self._head)
+        self._head = new_node
 
-        if self.__tail is None:
-            self.__tail = new_node
+        if self._tail is None:
+            self._tail = new_node
 
-        self.__size+=1
+        self._size+=1
 
-    def insert(self, index:int, value: Any):
+    def insert(self, value: Any, index:int = 0):
         """Insert at index in O(index) time; locating the predecessor traverses the list."""
 
-        if  0<=index<=self.__size:
+        if  not 0<=index<=self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+
+        if index < 0:
+            raise IndexError('Index must be positive')
         
-        if index <1:
+        if index ==0:
             self.add_front(value)
-        elif index == self.__size:
+        elif index == self._size:
             self.append(value)
         else:
             node_before_insertion = self.__getitem__(index-1)
             new_node = SLLNode(value,node_before_insertion.next)
             node_before_insertion.next = new_node
-            self.__size+=1
+            self._size+=1
 
     def remove(self, index=0):
         """Remove at index in O(index) time; removing the tail delegates to pop."""
-        if  0<=index<self.__size:
+        if  not 0<=index<self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
         
-        if index == self.__size-1:
+        if index == self._size-1:
             return self.pop()
 
         if index ==0:
-            temp = self.__head
-            self.__head = self.__head.next
-            if self.__size == 1:
-                self.__tail = None
+            temp = self._head
+            self._head = self._head.next
+            if self._size == 1:
+                self._tail = None
 
         else:
             prev_node = self.__getitem__(index-1)
             temp = prev_node.next
             prev_node.next = temp.next
 
-        self.__size-=1
+        self._size-=1
 
         return temp
 
     def pop(self):
         """Remove the tail in O(n) time because its predecessor must be found."""
-        if self.__size ==0:
+        if self._size ==0:
             raise IndexError("trying to pop from an empty list")
 
-        temp_node = self.__tail
+        temp_node = self._tail
         
-        if self.__size==1:
-            self.__head = self.__tail = None
+        if self._size==1:
+            self._head = self._tail = None
         else:
-            second_last_node = self.__getitem__(self.__size-2)
-            self.__tail = second_last_node
-            self.__tail.next = None
+            second_last_node = self.__getitem__(self._size-2)
+            self._tail = second_last_node
+            self._tail.next = None
 
-        self.__size-=1
+        self._size-=1
         return temp_node
             
     
 
 
-class DLL:
+class DLL(LinkedList):
     """
     Doubly Linked List
     """
     def __init__(self, *args):
         """Placeholder initializer; currently runs in O(1) time."""
+        super().__init__(*args)
 
-        self.__head = None
-        self.__tail = None
-        self.__size = 0
-
-        if args:
-            for i in args:
-                self.append(i)
-
-
-    @property
-    def size(self):
-        return self.__size
-
-    @property
-    def head(self):
-        return self.__head
-
-    @property
-    def tail(self):
-        return self.__tail
-
-    def __len__(self):
-        return self.__size
 
     def __str__(self) -> str:
             return 'LinkedList(['+', '.join(str(i.val) for i in self)+'])'
@@ -255,23 +257,19 @@ class DLL:
     def __repr__(self):
         return ' <=> '.join(i.__str__() for i in self)
 
-    
-    def __iter__(self):
-        i = self.__head
-        while i:
-            yield i
-            i = i.next
-
 
     def  __getitem__(self, index:int):
         # if index is <0 start from tail
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
+
         
-        if index >= self.__size:
+        if (abs(index) > self._size) or (index == self._size):
             raise IndexError('Index is out of bounds')
+            
+        
         if index>=0:
-            curr = self.__head
+            curr = self._head
             i = 0
             while i < index:
                 curr = curr.next
@@ -279,38 +277,40 @@ class DLL:
             return curr
         else:
             i = 1
-            curr = self.__tail
+            curr = self._tail
             while i<abs(index):
                 curr = curr.prev
                 i+=1
             return curr
 
+    def __add__(self, obj: DLL):
+        pass
 
     def append(self, value: Any):
-        if self.__size <1:
-            self.__head = DLLNode(value)
-            self.__tail = self.__head
+        if self._size <1:
+            self._head = DLLNode(value)
+            self._tail = self._head
         else:
-            self.__tail.next = DLLNode(value,prev_node = self.__tail)
-            self.__tail = self.__tail.next
+            self._tail.next = DLLNode(value,prev_node = self._tail)
+            self._tail = self._tail.next
 
-        self.__size+=1
+        self._size+=1
     
     def pop(self):
-        if self.__size==0:
+        if self._size==0:
             raise IndexError("trying to pop from an empty list")
 
-        temp = self.__tail
+        temp = self._tail
 
-        if self.__size == 1:
-            self.__head = self.__tail = None
+        if self._size == 1:
+            self._head = self._tail = None
         else:
-            self.__tail.prev.next = None
-            dummy = self.__tail.prev
-            self.__tail.prev = None
-            self.__tail = dummy
+            self._tail.prev.next = None
+            dummy = self._tail.prev
+            self._tail.prev = None
+            self._tail = dummy
 
-        self.__size -=1
+        self._size -=1
         return temp
 
 
@@ -318,7 +318,29 @@ class DLL:
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
 
+        #  only 0 based positive incides are allowed
+        if not 0<=index<=self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
 
+        if index == self._size:
+            self.append(value)
+            return
+
+        if index == 0:
+            new_node = DLLNode(value, next_node = self._head)
+            if self._head is not None:
+                self._head.prev = new_node
+            self._head = new_node
+            if self._tail is None:
+                self._tail = new_node
+            
+        else:
+            node_before_insertion = self.__getitem__(index-1)
+            new_node = DLLNode(value,next_node = node_before_insertion.next,prev_node = node_before_insertion)
+            node_before_insertion.next = new_node
+            new_node.next.prev = new_node
+
+        self._size+=1
         
 
 
@@ -326,12 +348,53 @@ class DLL:
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
 
+        if not 0<=index<self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+
+        if self._size ==0:
+            raise ValueError("List is already empty.")
+
+        if (index == self._size-1) or (self._size == 1):
+            return self.pop()
+
+        if index == 0:
+            temp = self._head
+            self._head = self._head.next
+            self._head.prev =  None
+            temp.next = None
+        else:
+            prev_node = self.__getitem__(index-1)
+            temp = prev_node.next
+            
+            prev_node.next = temp.next
+            temp.next.prev = prev_node
+            temp.next = None
+            temp.prev = None
+
+        self._size-=1
+        return temp
+
+    def extend(self, obj:DLL):
+        if obj is self:
+            raise ValueError("Cannot extend a DLL with itself.")
+
+        if not (self._size == 0 and len(obj) ==0):
+            # NOTE should we merge the two linked lists ?
+            # self._tail.next = obj.head
+            # obj.head.prev = self._tail
+            # self._tail = obj.tail    
+
+            for node  in obj:
+                self.append(node.val)
+
+
+
 
 
 class CircularLinkedList:
     def __init__(self, *args):
-        self.__head = None
-        self.__tail = None
-        self.__size = None
+        self._head = None
+        self._tail = None
+        self._size = None
 
         
