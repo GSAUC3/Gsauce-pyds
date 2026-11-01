@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
-
+from copy import deepcopy
 
 class SLLNode:
     def __init__(self, value: Any = 0, next_node: SLLNode | None = None):
@@ -72,10 +72,9 @@ class LinkedList(ABC):
     
     def __iter__(self):
         i = self._head
-        while i:
+        for _ in range(self._size):
             yield i
             i = i.next
-
 
     def __getitem__(self, index:int):
 
@@ -91,9 +90,19 @@ class LinkedList(ABC):
         return curr
 
 
-    @abstractmethod
-    def __add__(self, obj):...
+    def __add__(self, other):
+        if type(self) is not type(other):
+            return NotImplemented
 
+        result = type(self)()
+
+        for node in self:
+            result.append(deepcopy(node.val))
+
+        for node in other:
+            result.append(deepcopy(node.val))
+
+        return result
 
     @abstractmethod
     def append(self, value: Any) -> None:...
@@ -113,8 +122,6 @@ class LinkedList(ABC):
     def extend(self, obj):...
 
 
-
-
 class SLL(LinkedList):
     """
     Singly Linked List
@@ -129,19 +136,6 @@ class SLL(LinkedList):
 
     def __repr__(self):
         return ' -> '.join(i.__str__() for i in self)
-
-
-
-    def __add__(self, obj):
-        if not isinstance(obj,SLL):
-            return NotImplemented        
-
-        new = SLL()
-        for i in self:
-            new.append(i.val)
-        for j in obj:
-            new.append(j.val)
-        return new
 
 
     def extend(self, new_list: SLL):
@@ -240,8 +234,6 @@ class SLL(LinkedList):
         return temp_node
             
     
-
-
 class DLL(LinkedList):
     """
     Doubly Linked List
@@ -283,8 +275,6 @@ class DLL(LinkedList):
                 i+=1
             return curr
 
-    def __add__(self, obj: DLL):
-        pass
 
     def append(self, value: Any):
         if self._size <1:
@@ -388,13 +378,132 @@ class DLL(LinkedList):
                 self.append(node.val)
 
 
-
-
-
-class CircularLinkedList:
+class CircularSLL(LinkedList):
     def __init__(self, *args):
-        self._head = None
-        self._tail = None
-        self._size = None
+        super().__init__(*args)
+
+
+    def append(self, value: Any):
+        new  = SLLNode(value)
+        if self._size == 0:
+            new.next = new
+            self._head = new
+            self._tail = new
+        else:
+            new.next = self._tail.next
+            self._tail.next = new
+            self._tail = self._tail.next
+        
+        self._size+=1
+
+    def insert(self, value:Any, index:int= 0):
+
+        if  not 0<=index<=self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+
+        if index < 0:
+            raise IndexError('Index must be positive')
+
+        if index==0:
+            if self._size == 0:
+                self.append(value)
+                return
+            node = SLLNode(value, self._head)
+            self._tail.next = node
+            self._head = node
+
+        elif index == self._size:
+            self.append(value)
+            return
+        else:
+            before_insertion_node = self.__getitem__(index-1)
+            new_node = SLLNode(value, before_insertion_node.next)
+            before_insertion_node.next = new_node
+        self._size+=1
+
+    def pop(self):
+        if self._size == 0:
+            raise IndexError("trying  to pop from an empty List")
+
+        temp = self._tail
+        if self._size == 1:
+            self._head = self._tail = None
+            self._size = 0
+        else:
+            self._tail = self.__getitem__(self._size-2)
+            self._tail.next = self._head
+
+            self._size-=1
+
+        temp.next = None
+
+        return temp
+    
+    def remove(self, index: int = 0):
+        """Remove at index in O(index) time; removing the tail delegates to pop."""
+        if  not 0<=index<self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+        
+        if index == self._size-1:
+            return self.pop()
+
+
+        if index == 0:
+            temp = self._head
+            self._head = temp.next
+            self._tail.next = self._head
+        else:
+            prev_node = self.__getitem__(index-1)
+            temp = prev_node.next
+            prev_node.next = temp.next
+
+
+        temp.next = None
+        self._size -=1
+        return temp
+
+
+    def extend(self, new_list: CircularSLL):
+        if new_list is self:
+            raise ValueError("cannot extend a list with itself")
+
+        if not isinstance(new_list, CircularSLL):
+            raise TypeError(f"Expected an CircularSLL object, but got {type(new_list).__name__}")
+
+        if new_list.head is None:
+            return 
+
+        for node in new_list:
+            self.append(deepcopy(node.val))
+    
+        # new_list._head = None
+        # new_list._tail = None
+        # new_list._size = 0
+
+
+
+
+class CircularDLL(LinkedList):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def append(self, value: Any):
+        new = DLLNode(value)
+        if self._size == 0:
+            new.next = new
+            new.prev = new
+            self._head = new
+            self._tail = new
+        
+        self._size +=1
+    def insert(self, value:Any, index:int= 0):
+        pass
+    
+    def pop(self):
+        pass
+
+    def remove(self, index: int = 0):
+        pass
+    
 
         
