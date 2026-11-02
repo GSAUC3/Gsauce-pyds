@@ -476,10 +476,6 @@ class CircularSLL(LinkedList):
         for node in new_list:
             self.append(deepcopy(node.val))
     
-        # new_list._head = None
-        # new_list._tail = None
-        # new_list._size = 0
-
 
 
 
@@ -494,16 +490,99 @@ class CircularDLL(LinkedList):
             new.prev = new
             self._head = new
             self._tail = new
+        else:
+            self._tail.next =  new
+            new.prev = self._tail
+            new.next = self._head
+            self._tail = new
+            self._head.prev = self._tail
         
         self._size +=1
+
     def insert(self, value:Any, index:int= 0):
-        pass
+        
+        if  not 0<=index<=self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+
+        if index < 0:
+            raise IndexError('Index must be positive')
+
+        if index==0:
+            if self._size == 0:
+                self.append(value)
+                return 
+
+            new = DLLNode(value, next_node = self._head, prev_node = self._tail)
+            self._head.prev = new
+            self._tail.next = new
+            self._head = new
+        elif index == self._size:
+            self.append(value)
+            return 
+        else:
+            before_insertion_node = self.__getitem__(index-1)
+            node = DLLNode(value, next_node = before_insertion_node.next, prev_node = before_insertion_node)
+            before_insertion_node.next = node
+            node.next.prev = node
+        self._size+=1
     
     def pop(self):
-        pass
+        if self._size == 0:
+            raise IndexError("trying  to pop from an empty List")
+
+        temp = self._tail
+        if self._size == 1:
+            self._head = self._tail = None
+            self._size = 0
+        else:
+            self._tail = self.__getitem__(self._size-2)
+            self._tail.next = self._head
+            self._head.prev = self._tail
+            self._size-=1
+        temp.next = None
+        temp.prev = None
+        return temp
+
+
 
     def remove(self, index: int = 0):
-        pass
+        """Remove at index in O(index) time; removing the tail delegates to pop."""
+        if  not 0<=index<self._size:
+            raise IndexError('index (at) should be an int between [ 0, len(list)]') 
+        
+        if index == self._size-1:
+            return self.pop()
+
+        if index == 0:
+            temp = self._head
+            self._head = temp.next
+            self._head.prev = self._tail
+            self._tail.next = self._head        
+        else:
+            prev_node = self.__getitem__(index-1)
+
+            temp = prev_node.next
+            prev_node.next = temp.next
+            prev_node.next.prev = prev_node
+
+        temp.next = None
+        temp.prev = None
+        self._size -=1
+        return temp
+
+    def extend(self, new_list: CircularDLL):
+        if new_list is self:
+            raise ValueError("cannot extend a list with itself")
+
+        if not isinstance(new_list, CircularDLL):
+            raise TypeError(f"Expected an CircularSLL object, but got {type(new_list).__name__}")
+
+        if new_list.head is None:
+            return 
+
+        for node in new_list:
+            self.append(deepcopy(node.val))
     
+
 
         

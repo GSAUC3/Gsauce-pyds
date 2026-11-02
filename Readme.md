@@ -6,11 +6,11 @@ All implementation are done in `python`, `c++` equivalent is yet to embark on th
 
 ## Checklist
 
-- [ ] Linked Lists
+- [X] Linked Lists
   - [X] Singly Linked List 
   - [X] Doubly Linked List
   - [X] Circularly Singly Linked List
-  - [ ] Circularly Doubly Linked List
+  - [X] Circularly Doubly Linked List
 - [ ] Stacks
   - [ ] Stack using a List
   - [ ] Stack using a Linked List
