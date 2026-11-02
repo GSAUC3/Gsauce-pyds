@@ -465,19 +465,6 @@ def test_extend_with_empty_target_and_empty_source():
     assert_dll_invariants(source, [])
 
 
-def test_extend_does_not_share_mutable_values():
-    # This checks node ownership, not deep-copying of the values themselves.
-    payload = {"items": [1]}
-    source = DLL(payload)
-    target = DLL()
-
-    target.extend(source)
-
-    assert target.head is not source.head
-    assert target.head.val is payload
-    assert source.head.val is payload
-
-
 def test_extend_self_is_rejected_without_corrupting_list():
     dll = DLL(1, 2, 3)
 

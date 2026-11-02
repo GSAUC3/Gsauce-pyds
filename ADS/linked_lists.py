@@ -118,8 +118,20 @@ class LinkedList(ABC):
     @abstractmethod
     def remove(self, index: int = 0):...
 
-    @abstractmethod
-    def extend(self, obj):...
+
+    def extend(self, new_list):
+        if new_list is self:
+            raise ValueError("cannot extend a list with itself")
+
+        if not isinstance(new_list, type(self)):
+            raise TypeError(f"Expected an CircularSLL object, but got {type(new_list).__name__}")
+
+        if new_list.head is None:
+            return 
+
+        for node in new_list:
+            self.append(deepcopy(node.val))
+    
 
 
 class SLL(LinkedList):
@@ -136,22 +148,6 @@ class SLL(LinkedList):
 
     def __repr__(self):
         return ' -> '.join(i.__str__() for i in self)
-
-
-    def extend(self, new_list: SLL):
-        if new_list is self:
-            raise ValueError("cannot extend a list with itself")
-
-        if new_list.head is None:
-            return 
-        
-
-        extended = self.__add__(new_list)
-        self._head = extended.head
-        self._tail = extended.tail
-        self._size = len(extended)
-
-
 
         
     def append(self, value: Any):
@@ -252,6 +248,9 @@ class DLL(LinkedList):
 
     def  __getitem__(self, index:int):
         # if index is <0 start from tail
+        # NOTE & TODO DLL supports negative index
+        # need to implement that for other lists 
+
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
 
@@ -364,19 +363,6 @@ class DLL(LinkedList):
         self._size-=1
         return temp
 
-    def extend(self, obj:DLL):
-        if obj is self:
-            raise ValueError("Cannot extend a DLL with itself.")
-
-        if not (self._size == 0 and len(obj) ==0):
-            # NOTE should we merge the two linked lists ?
-            # self._tail.next = obj.head
-            # obj.head.prev = self._tail
-            # self._tail = obj.tail    
-
-            for node  in obj:
-                self.append(node.val)
-
 
 class CircularSLL(LinkedList):
     def __init__(self, *args):
@@ -461,22 +447,6 @@ class CircularSLL(LinkedList):
         temp.next = None
         self._size -=1
         return temp
-
-
-    def extend(self, new_list: CircularSLL):
-        if new_list is self:
-            raise ValueError("cannot extend a list with itself")
-
-        if not isinstance(new_list, CircularSLL):
-            raise TypeError(f"Expected an CircularSLL object, but got {type(new_list).__name__}")
-
-        if new_list.head is None:
-            return 
-
-        for node in new_list:
-            self.append(deepcopy(node.val))
-    
-
 
 
 class CircularDLL(LinkedList):
@@ -570,19 +540,3 @@ class CircularDLL(LinkedList):
         self._size -=1
         return temp
 
-    def extend(self, new_list: CircularDLL):
-        if new_list is self:
-            raise ValueError("cannot extend a list with itself")
-
-        if not isinstance(new_list, CircularDLL):
-            raise TypeError(f"Expected an CircularSLL object, but got {type(new_list).__name__}")
-
-        if new_list.head is None:
-            return 
-
-        for node in new_list:
-            self.append(deepcopy(node.val))
-    
-
-
-        
