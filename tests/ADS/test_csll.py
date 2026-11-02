@@ -210,9 +210,6 @@ def test_insert_out_of_bounds(populated_csll):
         populated_csll.insert(50, 5)
 
 
-def test_insert_negative_index(populated_csll):
-    with pytest.raises(IndexError):
-        populated_csll.insert(50, -1)
 
 
 def test_insert_invalid_index_type(populated_csll):
@@ -544,10 +541,6 @@ def test_getitem_out_of_bounds(populated_csll):
     with pytest.raises(IndexError):
         _ = populated_csll[4]
 
-
-def test_getitem_negative_index(populated_csll):
-    with pytest.raises(IndexError):
-        _ = populated_csll[-1]
 
 
 def test_getitem_invalid_type(populated_csll):

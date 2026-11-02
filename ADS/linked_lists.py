@@ -81,8 +81,13 @@ class LinkedList(ABC):
         if not isinstance(index, int):
             raise TypeError("Index must be an integer")
 
+        index = index+len(self) if index<0 else index
+        
         if index < 0 or index >= self._size:
             raise IndexError("Index out of range")
+
+
+
 
         curr = self._head
         for _ in range(index):
@@ -245,36 +250,6 @@ class DLL(LinkedList):
     def __repr__(self):
         return ' <=> '.join(i.__str__() for i in self)
 
-
-    def  __getitem__(self, index:int):
-        # if index is <0 start from tail
-        # NOTE & TODO DLL supports negative index
-        # need to implement that for other lists 
-
-        if not isinstance(index, int):
-            raise TypeError(f"Expected an integer, but got {type(index).__name__}")
-
-        
-        if (abs(index) > self._size) or (index == self._size):
-            raise IndexError('Index is out of bounds')
-            
-        
-        if index>=0:
-            curr = self._head
-            i = 0
-            while i < index:
-                curr = curr.next
-                i+=1
-            return curr
-        else:
-            i = 1
-            curr = self._tail
-            while i<abs(index):
-                curr = curr.prev
-                i+=1
-            return curr
-
-
     def append(self, value: Any):
         if self._size <1:
             self._head = DLLNode(value)
@@ -331,7 +306,6 @@ class DLL(LinkedList):
 
         self._size+=1
         
-
 
     def remove(self, index:int = 0) -> DLLNode | None:
         if not isinstance(index, int):

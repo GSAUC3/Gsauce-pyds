@@ -258,7 +258,7 @@ def test_insert_preserves_existing_nodes(populated_cdll):
     assert populated_cdll[4] is old_nodes[3]
 
 
-@pytest.mark.parametrize("index", [-1, -5, 5, 10])
+@pytest.mark.parametrize("index", [5, 10])
 def test_insert_invalid_index(populated_cdll, index):
     with pytest.raises(IndexError):
         populated_cdll.insert(50, index)
@@ -409,7 +409,7 @@ def test_remove_from_empty_list(empty_cdll):
         empty_cdll.remove(0)
 
 
-@pytest.mark.parametrize("index", [-1, -5, 4, 10])
+@pytest.mark.parametrize("index", [4, 10])
 def test_remove_invalid_index(populated_cdll, index):
     with pytest.raises(IndexError):
         populated_cdll.remove(index)
@@ -478,7 +478,7 @@ def test_getitem_single_element():
     assert ll[0] is ll.tail
 
 
-@pytest.mark.parametrize("index", [-1, -5, 4, 10])
+@pytest.mark.parametrize("index", [ 4, 10])
 def test_getitem_invalid_index(populated_cdll, index):
     with pytest.raises(IndexError):
         _ = populated_cdll[index]

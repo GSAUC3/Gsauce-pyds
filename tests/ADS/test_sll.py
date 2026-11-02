@@ -163,13 +163,6 @@ def test_getitem_returns_node():
     assert isinstance(ll[1], SLLNode)
 
 
-def test_getitem_negative_index():
-    ll = SLL(10, 20, 30)
-
-    with pytest.raises(IndexError):
-        ll[-1]
-
-
 def test_getitem_out_of_range():
     ll = SLL(10, 20, 30)
 
