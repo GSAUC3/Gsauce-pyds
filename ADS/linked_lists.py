@@ -76,6 +76,26 @@ class LinkedList(ABC):
             yield i
             i = i.next
 
+    def _normalize_insert_index(self, index: int) -> int:
+        if index < 0:
+            index += self._size
+
+        if index < 0 or index > self._size:
+            raise IndexError("list index out of range")
+
+        return index
+
+
+    def _normalize_remove_index(self, index: int) -> int:
+        if index < 0:
+            index += self._size
+
+        if index < 0 or index >= self._size:
+            raise IndexError("list index out of range")
+
+        return index
+
+
     def __getitem__(self, index:int):
 
         if not isinstance(index, int):
@@ -85,9 +105,6 @@ class LinkedList(ABC):
         
         if index < 0 or index >= self._size:
             raise IndexError("Index out of range")
-
-
-
 
         curr = self._head
         for _ in range(index):
@@ -178,11 +195,11 @@ class SLL(LinkedList):
     def insert(self, value: Any, index:int = 0):
         """Insert at index in O(index) time; locating the predecessor traverses the list."""
 
+        index = self._normalize_insert_index(index)
+
         if  not 0<=index<=self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
 
-        if index < 0:
-            raise IndexError('Index must be positive')
         
         if index ==0:
             self.add_front(value)
@@ -196,6 +213,8 @@ class SLL(LinkedList):
 
     def remove(self, index=0):
         """Remove at index in O(index) time; removing the tail delegates to pop."""
+        index = self._normalize_remove_index(index)
+
         if  not 0<=index<self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
         
@@ -279,6 +298,8 @@ class DLL(LinkedList):
 
 
     def insert(self, value: Any, index:int=0):
+        index = self._normalize_insert_index(index)
+
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
 
@@ -308,6 +329,8 @@ class DLL(LinkedList):
         
 
     def remove(self, index:int = 0) -> DLLNode | None:
+        index = self._normalize_remove_index(index)
+
         if not isinstance(index, int):
             raise TypeError(f"Expected an integer, but got {type(index).__name__}")
 
@@ -357,6 +380,7 @@ class CircularSLL(LinkedList):
         self._size+=1
 
     def insert(self, value:Any, index:int= 0):
+        index = self._normalize_insert_index(index)
 
         if  not 0<=index<=self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
@@ -401,6 +425,8 @@ class CircularSLL(LinkedList):
     
     def remove(self, index: int = 0):
         """Remove at index in O(index) time; removing the tail delegates to pop."""
+        index = self._normalize_remove_index(index)
+
         if  not 0<=index<self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
         
@@ -444,6 +470,7 @@ class CircularDLL(LinkedList):
         self._size +=1
 
     def insert(self, value:Any, index:int= 0):
+        index = self._normalize_insert_index(index)
         
         if  not 0<=index<=self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
@@ -491,6 +518,8 @@ class CircularDLL(LinkedList):
 
     def remove(self, index: int = 0):
         """Remove at index in O(index) time; removing the tail delegates to pop."""
+        index = self._normalize_remove_index(index)
+
         if  not 0<=index<self._size:
             raise IndexError('index (at) should be an int between [ 0, len(list)]') 
         

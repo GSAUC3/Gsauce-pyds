@@ -344,11 +344,6 @@ def test_remove_from_empty_list(empty_csll):
         empty_csll.remove(0)
 
 
-def test_remove_negative_index(populated_csll):
-    with pytest.raises(IndexError):
-        populated_csll.remove(-1)
-
-
 def test_remove_out_of_bounds(populated_csll):
     with pytest.raises(IndexError):
         populated_csll.remove(4)

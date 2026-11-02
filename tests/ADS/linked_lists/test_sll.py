@@ -330,7 +330,7 @@ def test_insert_updates_tail():
     assert ll.tail.next is None
 
 
-@pytest.mark.parametrize("index", [-1, -2, 4, 10])
+@pytest.mark.parametrize("index", [-10, -20, 4, 10])
 def test_insert_invalid_index(index):
     ll = SLL(10, 20, 30)
 
@@ -397,7 +397,7 @@ def test_remove_updates_tail():
     assert ll.tail.next is None
 
 
-@pytest.mark.parametrize("index", [-1, 3, 10])
+@pytest.mark.parametrize("index", [-10, 3, 10])
 def test_remove_invalid_index(index):
     ll = SLL(10, 20, 30)
 

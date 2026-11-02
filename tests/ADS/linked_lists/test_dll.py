@@ -325,7 +325,7 @@ def test_insert_at_end_of_empty_list():
     assert_dll_invariants(dll, [10])
 
 
-@pytest.mark.parametrize("index", [-1, -5, 5, 100])
+@pytest.mark.parametrize("index", [-10, -8, 5, 100])
 def test_insert_rejects_invalid_indices(populated_dll, index):
     with pytest.raises(IndexError):
         populated_dll.insert(99, index=index)
@@ -399,7 +399,7 @@ def test_remove_tail(populated_dll):
     assert_dll_invariants(populated_dll, [10, 20, 30])
 
 
-@pytest.mark.parametrize("index", [-1, 4, 100])
+@pytest.mark.parametrize("index", [-10, 4, 100])
 def test_remove_rejects_invalid_indices(populated_dll, index):
     with pytest.raises(IndexError):
         populated_dll.remove(index)
